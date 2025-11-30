@@ -102,15 +102,15 @@ export default function VetLogin() {
       <div className="fixed top-0 left-0 right-0 bg-white/80 backdrop-blur-md border-b border-blue-100 z-50">
         <div className="max-w-7xl mx-auto px-4 py-4 flex items-center gap-3">
           <img
-            src="/images/petbanner.png"
-            alt="HealthyPet Logo"
+            src="/images/veterinary.png"
+            alt="DokterHewan Logo"
             className="h-12 w-12 object-cover rounded-md"
             onError={(e) => {
               e.currentTarget.src =
                 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"%3E%3Crect fill="%23e0f2fe" width="100" height="100"/%3E%3Ctext x="50" y="50" text-anchor="middle" dy=".3em" font-size="28" fill="%230369a1" font-weight="bold"%3E🐾%3C/text%3E%3C/svg%3E';
             }}
           />
-          <h2 className="text-xl font-bold text-gray-900">HealthyPet</h2>
+          <h2 className="text-xl font-bold text-gray-900">HealhtyPet</h2>
         </div>
       </div>
 
@@ -121,8 +121,8 @@ export default function VetLogin() {
             {/* Header */}
             <div className="text-center mb-8">
               <img
-                src="/images/petbanner.png"
-                alt="HealthyPet Logo"
+                src="/images/veterinary.png"
+                alt="DokterHewan Logo"
                 className="h-20 w-20 object-cover rounded-lg mx-auto mb-4"
                 onError={(e) => {
                   e.currentTarget.src =
@@ -130,7 +130,7 @@ export default function VetLogin() {
                 }}
               />
               <h1 className="text-3xl font-bold text-gray-900">
-                HealthyPet Vet
+                HealthyPet
               </h1>
               <p className="text-gray-600 mt-2">Portal Dokter Hewan</p>
             </div>

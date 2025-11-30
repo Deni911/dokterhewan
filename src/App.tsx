@@ -6,6 +6,7 @@ import {
 } from "react-router-dom";
 import { AuthProvider } from "./context/AuthContext";
 import { VetProvider } from "./context/VetContext";
+import { ThemeProvider } from "./context/ThemeContext";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import Home from "./pages/Home";
@@ -51,9 +52,11 @@ function App() {
     <GoogleOAuthProvider clientId="YOUR_CLIENT_ID_HERE">
       <AuthProvider>
         <VetProvider>
-          <Router>
-            <AppContent />
-          </Router>
+          <ThemeProvider>
+            <Router>
+              <AppContent />
+            </Router>
+          </ThemeProvider>
         </VetProvider>
       </AuthProvider>
     </GoogleOAuthProvider>

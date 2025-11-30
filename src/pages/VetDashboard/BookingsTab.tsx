@@ -7,6 +7,7 @@ import {
   Calendar,
   Clock,
 } from "lucide-react";
+import { useTheme } from "../../context/ThemeContext";
 import {
   getPendingBookings,
   findMedicalRecordByBooking,
@@ -28,6 +29,7 @@ interface BookingsTabProps {
 }
 
 export function BookingsTab({ vetName = "", onError }: BookingsTabProps) {
+  const { isDarkMode } = useTheme();
   const [bookings, setBookings] = useState<VetBooking[]>([]);
   const [loading, setLoading] = useState(true);
   const [selectedBooking, setSelectedBooking] = useState<VetBooking | null>(
@@ -135,18 +137,38 @@ export function BookingsTab({ vetName = "", onError }: BookingsTabProps) {
     <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
       {/* Bookings List */}
       <div className="lg:col-span-1">
-        <div className="bg-white rounded-lg shadow-md p-6">
+        <div
+          className={`rounded-lg shadow-md p-6 ${
+            isDarkMode ? "bg-gray-800" : "bg-white"
+          }`}
+        >
           <div className="flex items-center gap-2 mb-4">
             <ClipboardList size={24} className="text-blue-600" />
-            <h2 className="text-xl font-bold text-gray-900">Booking Pending</h2>
+            <h2
+              className={`text-xl font-bold ${
+                isDarkMode ? "text-white" : "text-gray-900"
+              }`}
+            >
+              Booking Pending
+            </h2>
           </div>
 
           {loading && (
-            <p className="text-gray-500 text-center py-8">Memuat data...</p>
+            <p
+              className={`text-center py-8 ${
+                isDarkMode ? "text-gray-400" : "text-gray-500"
+              }`}
+            >
+              Memuat data...
+            </p>
           )}
 
           {!loading && bookings.length === 0 && (
-            <p className="text-gray-500 text-center py-8">
+            <p
+              className={`text-center py-8 ${
+                isDarkMode ? "text-gray-400" : "text-gray-500"
+              }`}
+            >
               Tidak ada booking pending
             </p>
           )}
@@ -158,13 +180,33 @@ export function BookingsTab({ vetName = "", onError }: BookingsTabProps) {
                 onClick={() => handleSelectBooking(booking)}
                 className={`w-full text-left p-4 rounded-lg border-2 transition ${
                   selectedBooking?.id === booking.id
-                    ? "bg-blue-50 border-blue-600"
+                    ? isDarkMode
+                      ? "bg-blue-900 border-blue-500"
+                      : "bg-blue-50 border-blue-600"
+                    : isDarkMode
+                    ? "bg-gray-700 border-gray-600 hover:border-blue-400"
                     : "bg-gray-50 border-gray-200 hover:border-blue-400"
                 }`}
               >
-                <p className="font-bold text-gray-900">{booking.petName}</p>
-                <p className="text-sm text-gray-600">{booking.ownerName}</p>
-                <p className="text-sm text-gray-500">
+                <p
+                  className={`font-bold ${
+                    isDarkMode ? "text-white" : "text-gray-900"
+                  }`}
+                >
+                  {booking.petName}
+                </p>
+                <p
+                  className={`text-sm ${
+                    isDarkMode ? "text-gray-400" : "text-gray-600"
+                  }`}
+                >
+                  {booking.ownerName}
+                </p>
+                <p
+                  className={`text-sm ${
+                    isDarkMode ? "text-gray-500" : "text-gray-500"
+                  }`}
+                >
                   {booking.date} {booking.time}
                 </p>
                 <p className="text-xs text-blue-600 font-semibold">
@@ -179,64 +221,137 @@ export function BookingsTab({ vetName = "", onError }: BookingsTabProps) {
       {/* Detail & Form */}
       <div className="lg:col-span-2">
         {!selectedBooking ? (
-          <div className="bg-white rounded-lg shadow-md p-12 text-center">
-            <ClipboardList size={48} className="mx-auto text-gray-300 mb-4" />
-            <p className="text-gray-500">
-              Pilih booking di sebelah untuk mulai mengisi medical record
+          <div
+            className={`rounded-lg shadow-md p-12 text-center ${
+              isDarkMode ? "bg-gray-800" : "bg-white"
+            }`}
+          >
+            <ClipboardList
+              size={48}
+              className={`mx-auto mb-4 ${
+                isDarkMode ? "text-gray-600" : "text-gray-300"
+              }`}
+            />
+            <p className={isDarkMode ? "text-gray-400" : "text-gray-500"}>
+              Pilih booking untuk mengisi medical record
             </p>
           </div>
         ) : (
-          <div className="bg-white rounded-lg shadow-md p-6">
+          <div
+            className={`rounded-lg shadow-md p-6 ${
+              isDarkMode ? "bg-gray-800" : "bg-white"
+            }`}
+          >
             {/* Booking Details */}
-            <div className="mb-8 pb-8 border-b border-gray-200">
-              <h3 className="text-xl font-bold text-gray-900 mb-4">
+            <div
+              className={`mb-8 pb-8 border-b ${
+                isDarkMode ? "border-gray-700" : "border-gray-200"
+              }`}
+            >
+              <h3
+                className={`text-xl font-bold mb-4 ${
+                  isDarkMode ? "text-white" : "text-gray-900"
+                }`}
+              >
                 Detail Booking
               </h3>
 
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <p className="text-sm text-gray-600">Nama Hewan</p>
-                  <p className="font-bold text-gray-900">
+                  <p
+                    className={`text-sm ${
+                      isDarkMode ? "text-gray-400" : "text-gray-600"
+                    }`}
+                  >
+                    Nama Hewan
+                  </p>
+                  <p
+                    className={`font-bold ${
+                      isDarkMode ? "text-white" : "text-gray-900"
+                    }`}
+                  >
                     {selectedBooking.petName}
                   </p>
-                  <p className="text-xs text-gray-500">
+                  <p
+                    className={`text-xs ${
+                      isDarkMode ? "text-gray-500" : "text-gray-500"
+                    }`}
+                  >
                     {selectedBooking.petType}
                   </p>
                 </div>
 
                 <div>
-                  <p className="text-sm text-gray-600">Layanan</p>
-                  <p className="font-bold text-gray-900">
+                  <p
+                    className={`text-sm ${
+                      isDarkMode ? "text-gray-400" : "text-gray-600"
+                    }`}
+                  >
+                    Layanan
+                  </p>
+                  <p
+                    className={`font-bold ${
+                      isDarkMode ? "text-white" : "text-gray-900"
+                    }`}
+                  >
                     {selectedBooking.service}
                   </p>
-                  <p className="text-xs text-gray-500">
+                  <p
+                    className={`text-xs ${
+                      isDarkMode ? "text-gray-500" : "text-gray-500"
+                    }`}
+                  >
                     {selectedBooking.duration} menit
                   </p>
                 </div>
 
                 <div>
-                  <p className="text-sm text-gray-600 flex items-center gap-1">
+                  <p
+                    className={`text-sm flex items-center gap-1 ${
+                      isDarkMode ? "text-gray-400" : "text-gray-600"
+                    }`}
+                  >
                     <User size={14} /> Pemilik
                   </p>
-                  <p className="font-bold text-gray-900">
+                  <p
+                    className={`font-bold ${
+                      isDarkMode ? "text-white" : "text-gray-900"
+                    }`}
+                  >
                     {selectedBooking.ownerName}
                   </p>
                 </div>
 
                 <div>
-                  <p className="text-sm text-gray-600 flex items-center gap-1">
+                  <p
+                    className={`text-sm flex items-center gap-1 ${
+                      isDarkMode ? "text-gray-400" : "text-gray-600"
+                    }`}
+                  >
                     <Phone size={14} /> Kontak
                   </p>
-                  <p className="font-bold text-gray-900">
+                  <p
+                    className={`font-bold ${
+                      isDarkMode ? "text-white" : "text-gray-900"
+                    }`}
+                  >
                     {selectedBooking.phone}
                   </p>
                 </div>
 
                 <div className="col-span-2">
-                  <p className="text-sm text-gray-600 flex items-center gap-1">
+                  <p
+                    className={`text-sm flex items-center gap-1 ${
+                      isDarkMode ? "text-gray-400" : "text-gray-600"
+                    }`}
+                  >
                     <Calendar size={14} /> Jadwal
                   </p>
-                  <p className="font-bold text-gray-900">
+                  <p
+                    className={`font-bold ${
+                      isDarkMode ? "text-white" : "text-gray-900"
+                    }`}
+                  >
                     {selectedBooking.date}{" "}
                     <Clock size={14} className="inline" />{" "}
                     {selectedBooking.time} WIB
@@ -245,8 +360,18 @@ export function BookingsTab({ vetName = "", onError }: BookingsTabProps) {
 
                 {selectedBooking.notes && (
                   <div className="col-span-2">
-                    <p className="text-sm text-gray-600">Catatan Pasien</p>
-                    <p className="text-gray-900">{selectedBooking.notes}</p>
+                    <p
+                      className={`text-sm ${
+                        isDarkMode ? "text-gray-400" : "text-gray-600"
+                      }`}
+                    >
+                      Catatan Pasien
+                    </p>
+                    <p
+                      className={isDarkMode ? "text-gray-300" : "text-gray-900"}
+                    >
+                      {selectedBooking.notes}
+                    </p>
                   </div>
                 )}
               </div>
@@ -254,13 +379,21 @@ export function BookingsTab({ vetName = "", onError }: BookingsTabProps) {
 
             {/* Medical Record Form */}
             <form onSubmit={handleSubmit}>
-              <h3 className="text-xl font-bold text-gray-900 mb-4">
+              <h3
+                className={`text-xl font-bold mb-4 ${
+                  isDarkMode ? "text-white" : "text-gray-900"
+                }`}
+              >
                 Isi Medical Record
               </h3>
 
               <div className="space-y-4">
                 <div>
-                  <label className="block text-sm font-semibold text-gray-700 mb-2">
+                  <label
+                    className={`block text-sm font-semibold mb-2 ${
+                      isDarkMode ? "text-gray-300" : "text-gray-700"
+                    }`}
+                  >
                     Nama Dokter Hewan *
                   </label>
                   <input
@@ -270,13 +403,21 @@ export function BookingsTab({ vetName = "", onError }: BookingsTabProps) {
                       setFormData({ ...formData, vetName: e.target.value })
                     }
                     required
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600"
+                    className={`w-full px-4 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600 ${
+                      isDarkMode
+                        ? "bg-gray-700 border border-gray-600 text-white"
+                        : "border border-gray-300 text-gray-900"
+                    }`}
                     placeholder="Dr. Budiman Santoso"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-sm font-semibold text-gray-700 mb-2">
+                  <label
+                    className={`block text-sm font-semibold mb-2 ${
+                      isDarkMode ? "text-gray-300" : "text-gray-700"
+                    }`}
+                  >
                     Diagnosa *
                   </label>
                   <textarea
@@ -286,13 +427,21 @@ export function BookingsTab({ vetName = "", onError }: BookingsTabProps) {
                     }
                     required
                     rows={3}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600 resize-none"
+                    className={`w-full px-4 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600 resize-none ${
+                      isDarkMode
+                        ? "bg-gray-700 border border-gray-600 text-white"
+                        : "border border-gray-300 text-gray-900"
+                    }`}
                     placeholder="Jelaskan diagnosa pasien..."
                   />
                 </div>
 
                 <div>
-                  <label className="block text-sm font-semibold text-gray-700 mb-2">
+                  <label
+                    className={`block text-sm font-semibold mb-2 ${
+                      isDarkMode ? "text-gray-300" : "text-gray-700"
+                    }`}
+                  >
                     Treatment/Penanganan *
                   </label>
                   <textarea
@@ -302,13 +451,21 @@ export function BookingsTab({ vetName = "", onError }: BookingsTabProps) {
                     }
                     required
                     rows={3}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600 resize-none"
+                    className={`w-full px-4 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600 resize-none ${
+                      isDarkMode
+                        ? "bg-gray-700 border border-gray-600 text-white"
+                        : "border border-gray-300 text-gray-900"
+                    }`}
                     placeholder="Jelaskan treatment yang diberikan..."
                   />
                 </div>
 
                 <div>
-                  <label className="block text-sm font-semibold text-gray-700 mb-2">
+                  <label
+                    className={`block text-sm font-semibold mb-2 ${
+                      isDarkMode ? "text-gray-300" : "text-gray-700"
+                    }`}
+                  >
                     Resep/Obat
                   </label>
                   <textarea
@@ -317,7 +474,11 @@ export function BookingsTab({ vetName = "", onError }: BookingsTabProps) {
                       setFormData({ ...formData, prescription: e.target.value })
                     }
                     rows={2}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600 resize-none"
+                    className={`w-full px-4 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600 resize-none ${
+                      isDarkMode
+                        ? "bg-gray-700 border border-gray-600 text-white"
+                        : "border border-gray-300 text-gray-900"
+                    }`}
                     placeholder="Resep/obat yang diberikan (opsional)"
                   />
                 </div>
@@ -327,7 +488,11 @@ export function BookingsTab({ vetName = "", onError }: BookingsTabProps) {
                 <button
                   type="button"
                   onClick={() => setSelectedBooking(null)}
-                  className="flex-1 px-4 py-2 bg-gray-300 text-gray-700 rounded-lg font-semibold hover:bg-gray-400 transition"
+                  className={`flex-1 px-4 py-2 rounded-lg font-semibold transition ${
+                    isDarkMode
+                      ? "bg-gray-700 text-gray-300 hover:bg-gray-600"
+                      : "bg-gray-300 text-gray-700 hover:bg-gray-400"
+                  }`}
                 >
                   Batal
                 </button>

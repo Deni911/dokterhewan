@@ -42,8 +42,8 @@ export default function Navbar() {
           {/* Logo */}
           <Link to="/" className="flex items-center space-x-2 flex-shrink-0">
             <img
-              src="/images/petbanner.png"
-              alt="HealthyPet Logo"
+              src="/images/veterinary.png"
+              alt="DokterHewan Logo"
               className="h-14 w-14 object-cover rounded-md"
               onError={(e) => {
                 e.currentTarget.src =
@@ -56,7 +56,7 @@ export default function Navbar() {
           </Link>
 
           {/* Desktop & Tablet Menu */}
-          <div className="hidden md:flex items-center space-x-1 flex-wrap gap-2">
+          <div className="hidden xl:flex items-center space-x-1 flex-wrap gap-2">
             <Link
               to="/"
               className="px-3 py-2 text-gray-700 hover:text-blue-600 transition duration-300 font-medium"
@@ -138,12 +138,20 @@ export default function Navbar() {
           <button
             ref={menuButtonRef}
             onClick={toggleMenu}
-            className="md:hidden p-2 text-gray-700 hover:text-blue-600 transition"
+            className="xl:hidden p-2 text-gray-700 hover:text-blue-600 transition"
           >
             {isOpen ? (
-              <X size={24} className="animate-spin-fast" />
+              <X
+                size={24}
+                className="animate-spin-fast transition-transform duration-300"
+                style={{ transform: isOpen ? "rotate(90deg)" : "rotate(0deg)" }}
+              />
             ) : (
-              <Menu size={24} className="animate-pulse-slow" />
+              <Menu
+                size={24}
+                className="animate-pulse-slow transition-transform duration-300"
+                style={{ transform: isOpen ? "rotate(90deg)" : "rotate(0deg)" }}
+              />
             )}
           </button>
         </div>
@@ -151,7 +159,7 @@ export default function Navbar() {
       {/* Mobile Menu */}
       <div
         ref={mobileMenuRef}
-        className={`md:hidden bg-white border-t border-gray-200 origin-top transition-all duration-300 ${
+        className={`xl:hidden bg-white border-t border-gray-200 origin-top transition-all duration-300 ${
           isOpen
             ? "animate-slide-down opacity-100 visible"
             : "animate-slide-up opacity-0 invisible"

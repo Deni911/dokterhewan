@@ -50,6 +50,7 @@ export default function Services() {
 
     return () => observer.disconnect();
   }, []);
+
   const services = [
     {
       icon: FaVirus,
