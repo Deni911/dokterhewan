@@ -1,15 +1,39 @@
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
 import { Menu, X, LogIn } from "lucide-react";
 import { useAuth } from "../context/AuthContext";
 import AuthModal from "./AuthModal";
+import "./Navbar.css";
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
   const { user, logout } = useAuth();
+  const mobileMenuRef = useRef<HTMLDivElement>(null);
+  const menuButtonRef = useRef<HTMLButtonElement>(null);
 
   const toggleMenu = () => setIsOpen(!isOpen);
+
+  // Close menu when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        isOpen &&
+        mobileMenuRef.current &&
+        menuButtonRef.current &&
+        !mobileMenuRef.current.contains(event.target as Node) &&
+        !menuButtonRef.current.contains(event.target as Node)
+      ) {
+        setIsOpen(false);
+      }
+    };
+
+    if (isOpen) {
+      document.addEventListener("mousedown", handleClickOutside);
+      return () =>
+        document.removeEventListener("mousedown", handleClickOutside);
+    }
+  }, [isOpen]);
 
   return (
     <nav className="fixed w-full bg-white/30 backdrop-blur-md shadow-sm z-50 border-b border-white/20">
@@ -112,16 +136,32 @@ export default function Navbar() {
 
           {/* Mobile Menu Button */}
           <button
+            ref={menuButtonRef}
             onClick={toggleMenu}
             className="md:hidden p-2 text-gray-700 hover:text-blue-600 transition"
           >
-            {isOpen ? <X size={24} /> : <Menu size={24} />}
+            {isOpen ? (
+              <X size={24} className="animate-spin-fast" />
+            ) : (
+              <Menu size={24} className="animate-pulse-slow" />
+            )}
           </button>
         </div>
       </div>
       {/* Mobile Menu */}
-      {isOpen && (
-        <div className="md:hidden bg-white border-t border-gray-200">
+      <div
+        ref={mobileMenuRef}
+        className={`md:hidden bg-white border-t border-gray-200 origin-top transition-all duration-300 ${
+          isOpen
+            ? "animate-slide-down opacity-100 visible"
+            : "animate-slide-up opacity-0 invisible"
+        }`}
+        style={{
+          maxHeight: isOpen ? "1000px" : "0px",
+          overflow: "hidden",
+        }}
+      >
+        {isOpen && (
           <div className="px-2 pt-2 pb-3 space-y-1">
             <Link
               to="/"
@@ -208,8 +248,8 @@ export default function Navbar() {
               )}
             </div>
           </div>
-        </div>
-      )}{" "}
+        )}
+      </div>
       {/* Auth Modal */}
       <AuthModal
         isOpen={isAuthModalOpen}
