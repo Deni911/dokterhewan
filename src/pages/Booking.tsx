@@ -279,11 +279,11 @@ export default function Booking() {
             <>
               {/* Progress Steps */}
               <div className="mb-12">
-                <div className="flex items-center justify-center gap-4 mb-8">
+                <div className="flex items-center justify-center gap-2 md:gap-4 mb-8 overflow-x-auto pb-2">
                   {[1, 2, 3, 4].map((s) => (
-                    <div key={s} className="flex items-center">
+                    <div key={s} className="flex items-center flex-shrink-0">
                       <div
-                        className={`w-12 h-12 rounded-full flex items-center justify-center font-bold text-lg transition ${
+                        className={`w-8 h-8 md:w-12 md:h-12 rounded-full flex items-center justify-center font-bold text-sm md:text-lg transition ${
                           step >= s
                             ? "bg-blue-600 text-white shadow-md"
                             : "bg-gray-300 text-gray-600"
@@ -293,7 +293,7 @@ export default function Booking() {
                       </div>
                       {s < 4 && (
                         <div
-                          className={`w-16 h-1 mx-2 transition ${
+                          className={`w-6 md:w-16 h-1 mx-1 md:mx-2 transition ${
                             step > s ? "bg-blue-600" : "bg-gray-300"
                           }`}
                         ></div>
@@ -301,19 +301,13 @@ export default function Booking() {
                     </div>
                   ))}
                 </div>
-                <div className="grid grid-cols-4 gap-2 text-center">
-                  <div className="text-xs md:text-sm font-semibold text-gray-600">
-                    Data Hewan
-                  </div>
-                  <div className="text-xs md:text-sm font-semibold text-gray-600">
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-2 text-center text-xs md:text-sm">
+                  <div className="font-semibold text-gray-600">Data Hewan</div>
+                  <div className="font-semibold text-gray-600">
                     Data Pemilik
                   </div>
-                  <div className="text-xs md:text-sm font-semibold text-gray-600">
-                    Jadwal
-                  </div>
-                  <div className="text-xs md:text-sm font-semibold text-gray-600">
-                    Konfirmasi
-                  </div>
+                  <div className="font-semibold text-gray-600">Jadwal</div>
+                  <div className="font-semibold text-gray-600">Konfirmasi</div>
                 </div>
               </div>
 
@@ -356,7 +350,7 @@ export default function Booking() {
                         value={formData.petName}
                         onChange={handleChange}
                         required
-                        className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600"
+                        className="w-full px-3 py-2 md:px-4 md:py-3 text-sm md:text-base border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600"
                         placeholder="Contoh: Fluffy, Max, etc."
                       />
                     </div>
@@ -370,7 +364,7 @@ export default function Booking() {
                         value={formData.petType}
                         onChange={handleChange}
                         required
-                        className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600"
+                        className="w-full px-3 py-2 md:px-4 md:py-3 text-sm md:text-base border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600"
                       >
                         <option value="">-- Pilih Jenis Hewan --</option>
                         {petTypes.map((type) => (
@@ -390,7 +384,7 @@ export default function Booking() {
                         value={formData.service}
                         onChange={handleChange}
                         required
-                        className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600"
+                        className="w-full px-3 py-2 md:px-4 md:py-3 text-sm md:text-base border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600"
                       >
                         <option value="">-- Pilih Layanan --</option>
                         {services.map((service) => (
@@ -411,7 +405,7 @@ export default function Booking() {
                         value={formData.notes}
                         onChange={handleChange}
                         rows={4}
-                        className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600 resize-none"
+                        className="w-full px-3 py-2 md:px-4 md:py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600 resize-none text-sm md:text-base"
                         placeholder="Jelaskan kondisi atau keluhan hewan Anda..."
                       ></textarea>
                     </div>
@@ -436,7 +430,7 @@ export default function Booking() {
                         value={formData.ownerName}
                         onChange={handleChange}
                         required
-                        className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600"
+                        className="w-full px-3 py-2 md:px-4 md:py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600 text-sm md:text-base"
                         placeholder="Masukkan nama lengkap Anda"
                       />
                     </div>
@@ -452,7 +446,7 @@ export default function Booking() {
                         value={formData.email}
                         onChange={handleChange}
                         required
-                        className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600"
+                        className="w-full px-3 py-2 md:px-4 md:py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600 text-sm md:text-base"
                         placeholder="email@example.com"
                       />
                     </div>
@@ -468,7 +462,7 @@ export default function Booking() {
                         value={formData.phone}
                         onChange={handleChange}
                         required
-                        className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600"
+                        className="w-full px-3 py-2 md:px-4 md:py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600 text-sm md:text-base"
                         placeholder="+62 8XX-XXXX-XXXX"
                       />
                     </div>
@@ -494,7 +488,7 @@ export default function Booking() {
                         onChange={handleChange}
                         required
                         min={new Date().toISOString().split("T")[0]}
-                        className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600"
+                        className="w-full px-3 py-2 md:px-4 md:py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600 text-sm md:text-base"
                       />
                       <p className="text-sm text-gray-500 mt-2">
                         Minimum besok, maksimal 30 hari ke depan
@@ -511,7 +505,7 @@ export default function Booking() {
                         value={formData.time}
                         onChange={handleChange}
                         required
-                        className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600"
+                        className="w-full px-3 py-2 md:px-4 md:py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600 text-sm md:text-base"
                       >
                         <option value="">-- Pilih Waktu --</option>
                         {timeSlots.map((slot) => {
