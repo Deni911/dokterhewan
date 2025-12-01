@@ -86,6 +86,121 @@ export default function Home() {
             opacity: 0;
           }
 
+          .btn-pesan-sekarang {
+            position: relative;
+            overflow: hidden;
+            animation: softPulse 2.5s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+            box-shadow: 0 0 20px rgba(37, 99, 235, 0.4), 0 4px 12px rgba(37, 99, 235, 0.2);
+          }
+
+          .btn-pesan-sekarang::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s;
+          }
+
+          .btn-pesan-sekarang:hover {
+            background: linear-gradient(135deg, #1e40af 0%, #1e3a8a 100%);
+            box-shadow: 0 0 30px rgba(37, 99, 235, 0.6), 0 8px 20px rgba(37, 99, 235, 0.3);
+            transform: translateY(-2px);
+          }
+
+          .btn-pesan-sekarang:hover::before {
+            left: 100%;
+          }
+
+          .btn-lihat-layanan {
+            position: relative;
+            overflow: hidden;
+            animation: softPulseGray 2.5s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+            box-shadow: 0 0 20px rgba(75, 85, 99, 0.3), 0 4px 12px rgba(75, 85, 99, 0.15);
+          }
+
+          .btn-lihat-layanan::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transition: left 0.5s;
+          }
+
+          .btn-lihat-layanan:hover {
+            background: linear-gradient(135deg, #d1d5db 0%, #9ca3af 100%);
+            box-shadow: 0 0 30px rgba(75, 85, 99, 0.4), 0 8px 20px rgba(75, 85, 99, 0.2);
+            transform: translateY(-2px);
+          }
+
+          .btn-lihat-layanan:hover::before {
+            left: 100%;
+          }
+
+          .btn-lihat-semua-layanan {
+            position: relative;
+            overflow: hidden;
+            animation: softPulseBlueStatic 2.5s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+            box-shadow: 0 0 20px rgba(37, 99, 235, 0.4), 0 4px 12px rgba(37, 99, 235, 0.2);
+          }
+
+          .btn-lihat-semua-layanan::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s;
+          }
+
+          .btn-lihat-semua-layanan:hover {
+            background: linear-gradient(135deg, #1e40af 0%, #1e3a8a 100%);
+            box-shadow: 0 0 30px rgba(37, 99, 235, 0.6), 0 8px 20px rgba(37, 99, 235, 0.3);
+          }
+
+          .btn-lihat-semua-layanan:hover::before {
+            left: 100%;
+          }
+
+          @keyframes softPulseBlueStatic {
+            0%,
+            100% {
+              box-shadow: 0 0 20px rgba(37, 99, 235, 0.4), 0 4px 12px rgba(37, 99, 235, 0.2);
+            }
+            50% {
+              box-shadow: 0 0 30px rgba(37, 99, 235, 0.6), 0 8px 16px rgba(37, 99, 235, 0.3);
+            }
+          }
+
+          @keyframes softPulse {
+            0%, 100% {
+              box-shadow: 0 0 20px rgba(37, 99, 235, 0.4), 0 4px 12px rgba(37, 99, 235, 0.2);
+              transform: scale(1);
+            }
+            50% {
+              box-shadow: 0 0 30px rgba(37, 99, 235, 0.6), 0 8px 16px rgba(37, 99, 235, 0.3);
+              transform: scale(1.02);
+            }
+          }
+
+          @keyframes softPulseGray {
+            0%, 100% {
+              box-shadow: 0 0 20px rgba(75, 85, 99, 0.3), 0 4px 12px rgba(75, 85, 99, 0.15);
+              transform: scale(1);
+            }
+            50% {
+              box-shadow: 0 0 30px rgba(75, 85, 99, 0.4), 0 8px 16px rgba(75, 85, 99, 0.2);
+              transform: scale(1.02);
+            }
+          }
+
           @keyframes slideDown {
             from {
               opacity: 0;
@@ -123,13 +238,13 @@ export default function Home() {
               <div className="flex flex-col sm:flex-row gap-4 hero-buttons">
                 <Link
                   to="/booking"
-                  className="px-8 py-3 bg-blue-600 text-white rounded-lg font-bold hover:bg-blue-700 hover:shadow-lg transition duration-300 text-center shadow-md"
+                  className="px-8 py-3 bg-blue-600 text-white rounded-lg font-bold text-center shadow-md btn-pesan-sekarang transition-all duration-300"
                 >
                   Pesan Sekarang
                 </Link>
                 <Link
                   to="/services"
-                  className="px-8 py-3 bg-gray-200 text-blue-600 rounded-lg font-bold hover:bg-gray-300 transition duration-300 text-center flex items-center justify-center shadow-md"
+                  className="px-8 py-3 bg-gray-200 text-blue-600 rounded-lg font-bold text-center flex items-center justify-center shadow-md btn-lihat-layanan transition-all duration-300"
                 >
                   Lihat Layanan <ChevronRight size={20} />
                 </Link>
@@ -232,7 +347,7 @@ export default function Home() {
           <div className="text-center mt-10">
             <Link
               to="/services"
-              className="inline-block px-8 py-3 bg-blue-600 text-white rounded-lg font-bold hover:bg-blue-700 transition duration-300"
+              className="inline-block px-8 py-3 bg-blue-600 text-white rounded-lg font-bold btn-lihat-semua-layanan transition-all duration-300"
             >
               Lihat Semua Layanan
             </Link>
@@ -259,6 +374,32 @@ export default function Home() {
 
       {/* CTA Section */}
       <section className="py-16 md:py-20 bg-gradient-to-r from-blue-600 to-cyan-500 text-white">
+        <style>{`
+          .btn-cta-konsultasi {
+            position: relative;
+            overflow: hidden;
+          }
+
+          .btn-cta-konsultasi::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transition: left 0.5s;
+          }
+
+          .btn-cta-konsultasi:hover {
+            background: linear-gradient(135deg, #d1d5db 0%, #9ca3af 100%);
+            box-shadow: 0 0 30px rgba(75, 85, 99, 0.4), 0 8px 20px rgba(75, 85, 99, 0.2);
+          }
+
+          .btn-cta-konsultasi:hover::before {
+            left: 100%;
+          }
+        `}</style>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="text-3xl md:text-4xl font-bold mb-6">
             Siap Menjaga Kesehatan Hewan Anda?
@@ -269,7 +410,7 @@ export default function Home() {
           </p>
           <button
             onClick={handleBookingClick}
-            className="inline-block px-8 py-3 bg-white text-blue-600 rounded-lg font-bold hover:shadow-lg transition duration-300"
+            className="inline-block px-8 py-3 bg-gray-200 text-blue-600 rounded-lg font-bold btn-glow btn-glow-gray-static transition-all duration-300 btn-cta-konsultasi"
           >
             Pesan Konsultasi Sekarang
           </button>

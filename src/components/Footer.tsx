@@ -1,7 +1,12 @@
 import { FaPhone, FaEnvelope, FaLocationDot, FaClock } from "react-icons/fa6";
+import { Link } from "react-router-dom";
 
 export default function Footer() {
   const currentYear = new Date().getFullYear();
+
+  const handleNavigation = () => {
+    window.scrollTo(0, 0);
+  };
 
   return (
     <footer className="bg-gray-900 text-gray-300 py-12">
@@ -29,24 +34,40 @@ export default function Footer() {
             <h4 className="text-white font-semibold mb-4">Quick Links</h4>
             <ul className="space-y-2 text-sm">
               <li>
-                <a href="#home" className="hover:text-blue-400 transition">
+                <Link
+                  to="/"
+                  onClick={handleNavigation}
+                  className="hover:text-blue-400 transition"
+                >
                   Home
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="#about" className="hover:text-blue-400 transition">
+                <Link
+                  to="/about"
+                  onClick={handleNavigation}
+                  className="hover:text-blue-400 transition"
+                >
                   About Us
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="#services" className="hover:text-blue-400 transition">
+                <Link
+                  to="/services"
+                  onClick={handleNavigation}
+                  className="hover:text-blue-400 transition"
+                >
                   Services
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="#contact" className="hover:text-blue-400 transition">
+                <Link
+                  to="/contact"
+                  onClick={handleNavigation}
+                  className="hover:text-blue-400 transition"
+                >
                   Contact
-                </a>
+                </Link>
               </li>
             </ul>
           </div>
@@ -56,24 +77,40 @@ export default function Footer() {
             <h4 className="text-white font-semibold mb-4">Services</h4>
             <ul className="space-y-2 text-sm">
               <li>
-                <a href="#" className="hover:text-blue-400 transition">
+                <Link
+                  to="/services"
+                  onClick={handleNavigation}
+                  className="hover:text-blue-400 transition"
+                >
                   Pemeriksaan Hewan
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="#" className="hover:text-blue-400 transition">
+                <Link
+                  to="/services"
+                  onClick={handleNavigation}
+                  className="hover:text-blue-400 transition"
+                >
                   Vaksinasi
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="#" className="hover:text-blue-400 transition">
+                <Link
+                  to="/services"
+                  onClick={handleNavigation}
+                  className="hover:text-blue-400 transition"
+                >
                   Grooming
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="#" className="hover:text-blue-400 transition">
+                <Link
+                  to="/services"
+                  onClick={handleNavigation}
+                  className="hover:text-blue-400 transition"
+                >
                   Operasi
-                </a>
+                </Link>
               </li>
             </ul>
           </div>

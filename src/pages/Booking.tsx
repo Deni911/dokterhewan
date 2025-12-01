@@ -63,7 +63,7 @@ export default function Booking() {
               </p>
               <button
                 onClick={() => setIsAuthModalOpen(true)}
-                className="px-8 py-3 bg-blue-600 text-white rounded-lg font-bold hover:bg-blue-700 transition"
+                className="px-8 py-3 bg-blue-600 text-white rounded-lg font-bold btn-glow btn-glow-blue transition-all duration-300"
               >
                 Login / Register
               </button>
@@ -270,7 +270,7 @@ export default function Booking() {
                     notes: "",
                   });
                 }}
-                className="px-8 py-3 bg-blue-600 text-white rounded-lg font-bold hover:bg-blue-700 transition"
+                className="px-8 py-3 bg-blue-600 text-white rounded-lg font-bold btn-glow btn-glow-blue transition-all duration-300"
               >
                 Buat Booking Baru
               </button>
@@ -622,7 +622,7 @@ export default function Booking() {
                     type="button"
                     onClick={() => setStep(Math.max(1, step - 1))}
                     disabled={step === 1 || loading}
-                    className="px-6 py-3 bg-gray-300 text-gray-700 rounded-lg font-bold hover:bg-gray-400 transition disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="px-6 py-3 bg-gray-300 text-gray-700 rounded-lg font-bold btn-glow btn-glow-gray transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
                   >
                     Sebelumnya
                   </button>
@@ -656,7 +656,7 @@ export default function Booking() {
                         setStep(step + 1);
                       }}
                       disabled={loading}
-                      className="px-6 py-3 bg-blue-600 text-white rounded-lg font-bold hover:bg-blue-700 transition disabled:opacity-50 disabled:cursor-not-allowed"
+                      className="px-6 py-3 bg-blue-600 text-white rounded-lg font-bold btn-glow btn-glow-blue transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
                     >
                       Lanjutkan
                     </button>
@@ -664,7 +664,7 @@ export default function Booking() {
                     <button
                       type="submit"
                       disabled={loading}
-                      className="px-6 py-3 bg-green-600 text-white rounded-lg font-bold hover:bg-green-700 transition disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                      className="px-6 py-3 bg-green-600 text-white rounded-lg font-bold btn-glow btn-glow-green transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
                     >
                       {loading ? (
                         <>

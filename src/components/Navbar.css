@@ -91,3 +91,58 @@
 .hamburger-icon.close {
   animation: rotateClose 0.3s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
 }
+
+/* Menu items closing animation - stagger effect */
+@keyframes menuItemClose {
+  from {
+    opacity: 1;
+    transform: translateX(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateX(10px);
+  }
+}
+
+.menu-closing .menu-item {
+  animation: menuItemClose 0.2s ease-in forwards;
+}
+
+.menu-item:nth-child(1) {
+  animation-delay: 0s;
+}
+.menu-item:nth-child(2) {
+  animation-delay: 0.05s;
+}
+.menu-item:nth-child(3) {
+  animation-delay: 0.1s;
+}
+.menu-item:nth-child(4) {
+  animation-delay: 0.15s;
+}
+.menu-item:nth-child(5) {
+  animation-delay: 0.2s;
+}
+.menu-item:nth-child(6) {
+  animation-delay: 0.25s;
+}
+.menu-item:nth-child(7) {
+  animation-delay: 0.3s;
+}
+
+/* Container closing animation */
+@keyframes menuContainerClose {
+  from {
+    max-height: 1000px;
+    opacity: 1;
+  }
+  to {
+    max-height: 0px;
+    opacity: 0;
+  }
+}
+
+.menu-container-closing {
+  animation: menuContainerClose 0.4s ease-in forwards !important;
+  border-top: none;
+}

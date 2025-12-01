@@ -44,11 +44,50 @@ export default function About() {
   }, []);
   return (
     <div className="pt-16">
-      {/* Hero Section */}
-      <section className="bg-gradient-to-r from-blue-600 to-cyan-500 text-white py-16 md:py-20">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h1 className="text-4xl md:text-5xl font-bold mb-4">Tentang Kami</h1>
-          <p className="text-lg text-blue-100 max-w-2xl">
+      {/* Hero Section with Animations */}
+      <section className="relative bg-gradient-to-r from-blue-600 to-cyan-500 text-white py-16 md:py-24 overflow-hidden">
+        <div className="absolute inset-0 opacity-20">
+          <div className="absolute top-0 right-0 w-96 h-96 bg-white rounded-full blur-3xl opacity-10"></div>
+          <div className="absolute bottom-0 left-0 w-96 h-96 bg-white rounded-full blur-3xl opacity-10"></div>
+        </div>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+          <style>{`
+            .about-hero-title {
+              animation: slideDown 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+              opacity: 0;
+            }
+
+            .about-hero-subtitle {
+              animation: fadeInUp 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) 0.2s forwards;
+              opacity: 0;
+            }
+
+            @keyframes slideDown {
+              from {
+                opacity: 0;
+                transform: translateY(-30px);
+              }
+              to {
+                opacity: 1;
+                transform: translateY(0);
+              }
+            }
+
+            @keyframes fadeInUp {
+              from {
+                opacity: 0;
+                transform: translateY(30px);
+              }
+              to {
+                opacity: 1;
+                transform: translateY(0);
+              }
+            }
+          `}</style>
+          <h1 className="text-4xl md:text-5xl font-bold mb-4 about-hero-title drop-shadow-lg">
+            Tentang Kami
+          </h1>
+          <p className="text-lg text-blue-100 max-w-2xl about-hero-subtitle drop-shadow-md font-medium">
             Klinik hewan terpercaya yang berdedikasi untuk memberikan perawatan
             kesehatan terbaik bagi hewan kesayangan Anda.
           </p>
@@ -56,15 +95,15 @@ export default function About() {
       </section>
 
       {/* Company Story */}
-      <section className="py-16 md:py-20 bg-[#f3f4f6]" ref={storyRef}>
+      <section className="py-16 md:py-20 bg-white" ref={storyRef}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
             <div className={`${isStoryVisible ? "fade-in-left" : "opacity-0"}`}>
               <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-6">
-                Sejarah HealthyPet
+                Sejarah DokterHewan
               </h2>
               <p className="text-gray-600 text-lg mb-4">
-                HealthyPet didirikan pada tahun 2010 dengan visi untuk
+                DokterHewan didirikan pada tahun 2010 dengan visi untuk
                 memberikan layanan kesehatan hewan berkualitas tinggi di
                 Tangerang. Kami memulai dengan klinik kecil dan terus berkembang
                 hingga menjadi salah satu klinik hewan terpercaya di kota.
@@ -80,15 +119,19 @@ export default function About() {
                 Anda.
               </p>
             </div>
-            <div className="overflow-hidden rounded-lg shadow-lg story-image-wrapper">
+            <div
+              className={`overflow-hidden rounded-lg shadow-lg story-image-wrapper ${
+                isStoryVisible ? "fade-in-right" : "opacity-0"
+              }`}
+            >
               <img
                 ref={storyImageRef}
                 src="/images/Dokter-Hewan-sejarah.jpg"
-                alt="Sejarah HealthyPet"
+                alt="Sejarah DokterHewan"
                 className="object-cover w-full h-96 zoom-on-hover"
                 onError={(e) => {
                   e.currentTarget.src =
-                    'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300"%3E%3Crect fill="%23dbeafe" width="400" height="300"/%3E%3Ctext x="50%25" y="50%25" text-anchor="middle" dy=".3em" font-size="18" fill="%230369a1"%3ESejarah HealthyPet%3C/text%3E%3Ctext x="50%25" y="60%25" text-anchor="middle" dy=".3em" font-size="48"%3E🏥%3C/text%3E%3C/svg%3E';
+                    'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300"%3E%3Crect fill="%23dbeafe" width="400" height="300"/%3E%3Ctext x="50%25" y="50%25" text-anchor="middle" dy=".3em" font-size="18" fill="%230369a1"%3ESejarah DokterHewan%3C/text%3E%3Ctext x="50%25" y="60%25" text-anchor="middle" dy=".3em" font-size="48"%3E🏥%3C/text%3E%3C/svg%3E';
                 }}
               />
             </div>
@@ -97,6 +140,11 @@ export default function About() {
           <style>{`
             .fade-in-left {
               animation: fadeInLeft 0.8s ease-out forwards;
+              opacity: 0;
+            }
+
+            .fade-in-right {
+              animation: fadeInRight 0.8s ease-out forwards;
               opacity: 0;
             }
 
@@ -123,14 +171,32 @@ export default function About() {
                 transform: translateX(0);
               }
             }
+
+            @keyframes fadeInRight {
+              from {
+                opacity: 0;
+                transform: translateX(30px);
+              }
+              to {
+                opacity: 1;
+                transform: translateX(0);
+              }
+            }
           `}</style>
         </div>
       </section>
 
       {/* Mission & Vision */}
-      <section className="py-16 md:py-20 bg-[#f3f4f6]" ref={missionRef}>
+      <section className="py-16 md:py-20 bg-gray-50" ref={missionRef}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <style>{`
+            .mission-vision-title {
+              animation: ${
+                isMissionVisible ? "fadeInScale" : "none"
+              } 0.8s ease-out forwards;
+              opacity: ${isMissionVisible ? "1" : "0"};
+            }
+
             .mission-vision-card {
               animation: ${
                 isMissionVisible ? "slideUp" : "none"
@@ -152,6 +218,17 @@ export default function About() {
               transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             }
 
+            @keyframes fadeInScale {
+              from {
+                opacity: 0;
+                transform: scale(0.95);
+              }
+              to {
+                opacity: 1;
+                transform: scale(1);
+              }
+            }
+
             @keyframes slideUp {
               from {
                 opacity: 0;
@@ -163,6 +240,13 @@ export default function About() {
               }
             }
           `}</style>
+
+          <h2
+            className={`text-3xl md:text-4xl font-bold text-gray-900 mb-12 text-center mission-vision-title`}
+          >
+            Misi & Visi Kami
+          </h2>
+
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             <div className="mission-vision-card bg-white p-8 rounded-lg border border-gray-200 shadow-md text-center">
               <div className="w-12 h-12 bg-blue-600 rounded-lg flex items-center justify-center mb-4 mx-auto">
@@ -197,7 +281,7 @@ export default function About() {
       </section>
 
       {/* Values Section */}
-      <section className="py-16 md:py-20 bg-[#f3f4f6]" ref={valuesRef}>
+      <section className="py-16 md:py-20 bg-white" ref={valuesRef}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <h2
             className={`text-3xl md:text-4xl font-bold text-gray-900 mb-12 text-center ${
@@ -304,7 +388,7 @@ export default function About() {
       </section>
 
       {/* Team Section */}
-      <section className="py-16 md:py-20 bg-[#f3f4f6]" ref={teamRef}>
+      <section className="py-16 md:py-20 bg-gray-50" ref={teamRef}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <h2
             className={`text-3xl md:text-4xl font-bold text-gray-900 mb-12 text-center ${
@@ -357,10 +441,15 @@ export default function About() {
               inset: 0;
               background: rgba(0, 0, 0, 0.4);
               z-index: 1;
+              transition: background 0.3s ease;
             }
 
             .team-card:hover {
               box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            }
+
+            .team-card:hover::before {
+              background: rgba(0, 0, 0, 0.5);
             }
 
             .team-info {
@@ -386,6 +475,28 @@ export default function About() {
               font-size: 0.95rem;
               margin: 0;
               opacity: 0.95;
+            }
+
+            @keyframes slideInUp {
+              from {
+                opacity: 0;
+                transform: translateY(30px);
+              }
+              to {
+                opacity: 1;
+                transform: translateY(0);
+              }
+            }
+
+            @keyframes fadeInScale {
+              from {
+                opacity: 0;
+                transform: scale(0.95);
+              }
+              to {
+                opacity: 1;
+                transform: scale(1);
+              }
             }
           `}</style>
 

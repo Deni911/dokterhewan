@@ -1,5 +1,3 @@
-/* App specific styles */
-
 /* Smooth transitions */
 * {
   transition-property: background-color, border-color, color, fill, stroke;
@@ -104,4 +102,370 @@ html.theme-transitioning {
 html.theme-transitioning * {
   transition: background-color 0.4s ease-out, border-color 0.4s ease-out,
     color 0.4s ease-out, fill 0.4s ease-out, stroke 0.4s ease-out !important;
+}
+
+/* BUTTON GLOW AND SHINE EFFECTS */
+
+/* Base button glow effect for all buttons */
+.btn-glow {
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s ease-out;
+}
+
+/* Shine effect pseudo-element */
+.btn-glow::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.2),
+    transparent
+  );
+  transition: left 0.5s;
+}
+
+.btn-glow:hover::before {
+  left: 100%;
+}
+
+/* Blue button glow */
+.btn-glow-blue {
+  animation: softPulseBlue 2.5s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  box-shadow: 0 0 20px rgba(37, 99, 235, 0.4), 0 4px 12px rgba(37, 99, 235, 0.2);
+}
+
+.btn-glow-blue:hover {
+  box-shadow: 0 0 30px rgba(37, 99, 235, 0.6), 0 8px 20px rgba(37, 99, 235, 0.3);
+}
+
+/* Gray button glow */
+.btn-glow-gray {
+  animation: softPulseGray 2.5s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  box-shadow: 0 0 20px rgba(75, 85, 99, 0.3), 0 4px 12px rgba(75, 85, 99, 0.15);
+}
+
+.btn-glow-gray:hover {
+  box-shadow: 0 0 30px rgba(75, 85, 99, 0.4), 0 8px 20px rgba(75, 85, 99, 0.2);
+}
+
+/* Green button glow */
+.btn-glow-green {
+  animation: softPulseGreen 2.5s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  box-shadow: 0 0 20px rgba(34, 197, 94, 0.4), 0 4px 12px rgba(34, 197, 94, 0.2);
+}
+
+.btn-glow-green:hover {
+  box-shadow: 0 0 30px rgba(34, 197, 94, 0.6), 0 8px 20px rgba(34, 197, 94, 0.3);
+}
+
+/* Red button glow */
+.btn-glow-red {
+  animation: softPulseRed 2.5s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  box-shadow: 0 0 20px rgba(220, 38, 38, 0.4), 0 4px 12px rgba(220, 38, 38, 0.2);
+}
+
+.btn-glow-red:hover {
+  box-shadow: 0 0 30px rgba(220, 38, 38, 0.6), 0 8px 20px rgba(220, 38, 38, 0.3);
+}
+
+/* Purple button glow */
+.btn-glow-purple {
+  animation: softPulsePurple 2.5s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  box-shadow: 0 0 20px rgba(168, 85, 247, 0.4),
+    0 4px 12px rgba(168, 85, 247, 0.2);
+}
+
+.btn-glow-purple:hover {
+  box-shadow: 0 0 30px rgba(168, 85, 247, 0.6),
+    0 8px 20px rgba(168, 85, 247, 0.3);
+}
+
+/* Cyan button glow */
+.btn-glow-cyan {
+  animation: softPulseCyan 2.5s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  box-shadow: 0 0 20px rgba(34, 211, 238, 0.4),
+    0 4px 12px rgba(34, 211, 238, 0.2);
+}
+
+.btn-glow-cyan:hover {
+  box-shadow: 0 0 30px rgba(34, 211, 238, 0.6),
+    0 8px 20px rgba(34, 211, 238, 0.3);
+}
+
+/* White button glow */
+.btn-glow-white {
+  animation: softPulseWhite 2.5s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  box-shadow: 0 0 20px rgba(255, 255, 255, 0.3),
+    0 4px 12px rgba(255, 255, 255, 0.15);
+}
+
+.btn-glow-white:hover {
+  box-shadow: 0 0 30px rgba(255, 255, 255, 0.4),
+    0 8px 20px rgba(255, 255, 255, 0.2);
+}
+
+/* Pulse animations for different colors */
+@keyframes softPulseBlue {
+  0%,
+  100% {
+    box-shadow: 0 0 20px rgba(37, 99, 235, 0.4),
+      0 4px 12px rgba(37, 99, 235, 0.2);
+    transform: scale(1);
+  }
+  50% {
+    box-shadow: 0 0 30px rgba(37, 99, 235, 0.6),
+      0 8px 16px rgba(37, 99, 235, 0.3);
+    transform: scale(1.02);
+  }
+}
+
+@keyframes softPulseGray {
+  0%,
+  100% {
+    box-shadow: 0 0 20px rgba(75, 85, 99, 0.3),
+      0 4px 12px rgba(75, 85, 99, 0.15);
+    transform: scale(1);
+  }
+  50% {
+    box-shadow: 0 0 30px rgba(75, 85, 99, 0.4), 0 8px 16px rgba(75, 85, 99, 0.2);
+    transform: scale(1.02);
+  }
+}
+
+@keyframes softPulseGreen {
+  0%,
+  100% {
+    box-shadow: 0 0 20px rgba(34, 197, 94, 0.4),
+      0 4px 12px rgba(34, 197, 94, 0.2);
+    transform: scale(1);
+  }
+  50% {
+    box-shadow: 0 0 30px rgba(34, 197, 94, 0.6),
+      0 8px 16px rgba(34, 197, 94, 0.3);
+    transform: scale(1.02);
+  }
+}
+
+@keyframes softPulseRed {
+  0%,
+  100% {
+    box-shadow: 0 0 20px rgba(220, 38, 38, 0.4),
+      0 4px 12px rgba(220, 38, 38, 0.2);
+    transform: scale(1);
+  }
+  50% {
+    box-shadow: 0 0 30px rgba(220, 38, 38, 0.6),
+      0 8px 16px rgba(220, 38, 38, 0.3);
+    transform: scale(1.02);
+  }
+}
+
+@keyframes softPulsePurple {
+  0%,
+  100% {
+    box-shadow: 0 0 20px rgba(168, 85, 247, 0.4),
+      0 4px 12px rgba(168, 85, 247, 0.2);
+    transform: scale(1);
+  }
+  50% {
+    box-shadow: 0 0 30px rgba(168, 85, 247, 0.6),
+      0 8px 16px rgba(168, 85, 247, 0.3);
+    transform: scale(1.02);
+  }
+}
+
+@keyframes softPulseCyan {
+  0%,
+  100% {
+    box-shadow: 0 0 20px rgba(34, 211, 238, 0.4),
+      0 4px 12px rgba(34, 211, 238, 0.2);
+    transform: scale(1);
+  }
+  50% {
+    box-shadow: 0 0 30px rgba(34, 211, 238, 0.6),
+      0 8px 16px rgba(34, 211, 238, 0.3);
+    transform: scale(1.02);
+  }
+}
+
+@keyframes softPulseWhite {
+  0%,
+  100% {
+    box-shadow: 0 0 20px rgba(255, 255, 255, 0.3),
+      0 4px 12px rgba(255, 255, 255, 0.15);
+    transform: scale(1);
+  }
+  50% {
+    box-shadow: 0 0 30px rgba(255, 255, 255, 0.4),
+      0 8px 16px rgba(255, 255, 255, 0.2);
+    transform: scale(1.02);
+  }
+}
+
+/* STATIC GLOW VARIANTS (No scale/movement) */
+
+/* Blue button glow - static */
+.btn-glow-blue-static {
+  animation: softPulseBlueStatic 2.5s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  box-shadow: 0 0 20px rgba(37, 99, 235, 0.4), 0 4px 12px rgba(37, 99, 235, 0.2);
+}
+
+.btn-glow-blue-static:hover {
+  box-shadow: 0 0 30px rgba(37, 99, 235, 0.6), 0 8px 20px rgba(37, 99, 235, 0.3);
+}
+
+/* Gray button glow - static */
+.btn-glow-gray-static {
+  animation: softPulseGrayStatic 2.5s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  box-shadow: 0 0 20px rgba(75, 85, 99, 0.3), 0 4px 12px rgba(75, 85, 99, 0.15);
+}
+
+.btn-glow-gray-static:hover {
+  box-shadow: 0 0 30px rgba(75, 85, 99, 0.4), 0 8px 20px rgba(75, 85, 99, 0.2);
+}
+
+/* Green button glow - static */
+.btn-glow-green-static {
+  animation: softPulseGreenStatic 2.5s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  box-shadow: 0 0 20px rgba(34, 197, 94, 0.4), 0 4px 12px rgba(34, 197, 94, 0.2);
+}
+
+.btn-glow-green-static:hover {
+  box-shadow: 0 0 30px rgba(34, 197, 94, 0.6), 0 8px 20px rgba(34, 197, 94, 0.3);
+}
+
+/* Red button glow - static */
+.btn-glow-red-static {
+  animation: softPulseRedStatic 2.5s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  box-shadow: 0 0 20px rgba(220, 38, 38, 0.4), 0 4px 12px rgba(220, 38, 38, 0.2);
+}
+
+.btn-glow-red-static:hover {
+  box-shadow: 0 0 30px rgba(220, 38, 38, 0.6), 0 8px 20px rgba(220, 38, 38, 0.3);
+}
+
+/* Purple button glow - static */
+.btn-glow-purple-static {
+  animation: softPulsePurpleStatic 2.5s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  box-shadow: 0 0 20px rgba(168, 85, 247, 0.4),
+    0 4px 12px rgba(168, 85, 247, 0.2);
+}
+
+.btn-glow-purple-static:hover {
+  box-shadow: 0 0 30px rgba(168, 85, 247, 0.6),
+    0 8px 20px rgba(168, 85, 247, 0.3);
+}
+
+/* Cyan button glow - static */
+.btn-glow-cyan-static {
+  animation: softPulseCyanStatic 2.5s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  box-shadow: 0 0 20px rgba(34, 211, 238, 0.4),
+    0 4px 12px rgba(34, 211, 238, 0.2);
+}
+
+.btn-glow-cyan-static:hover {
+  box-shadow: 0 0 30px rgba(34, 211, 238, 0.6),
+    0 8px 20px rgba(34, 211, 238, 0.3);
+}
+
+/* White button glow - static */
+.btn-glow-white-static {
+  animation: softPulseWhiteStatic 2.5s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  box-shadow: 0 0 20px rgba(255, 255, 255, 0.3),
+    0 4px 12px rgba(255, 255, 255, 0.15);
+}
+
+.btn-glow-white-static:hover {
+  box-shadow: 0 0 30px rgba(255, 255, 255, 0.4),
+    0 8px 20px rgba(255, 255, 255, 0.2);
+}
+
+/* Static pulse animations - NO SCALE */
+@keyframes softPulseBlueStatic {
+  0%,
+  100% {
+    box-shadow: 0 0 20px rgba(37, 99, 235, 0.4),
+      0 4px 12px rgba(37, 99, 235, 0.2);
+  }
+  50% {
+    box-shadow: 0 0 30px rgba(37, 99, 235, 0.6),
+      0 8px 16px rgba(37, 99, 235, 0.3);
+  }
+}
+
+@keyframes softPulseGrayStatic {
+  0%,
+  100% {
+    box-shadow: 0 0 20px rgba(75, 85, 99, 0.3),
+      0 4px 12px rgba(75, 85, 99, 0.15);
+  }
+  50% {
+    box-shadow: 0 0 30px rgba(75, 85, 99, 0.4), 0 8px 16px rgba(75, 85, 99, 0.2);
+  }
+}
+
+@keyframes softPulseGreenStatic {
+  0%,
+  100% {
+    box-shadow: 0 0 20px rgba(34, 197, 94, 0.4),
+      0 4px 12px rgba(34, 197, 94, 0.2);
+  }
+  50% {
+    box-shadow: 0 0 30px rgba(34, 197, 94, 0.6),
+      0 8px 16px rgba(34, 197, 94, 0.3);
+  }
+}
+
+@keyframes softPulseRedStatic {
+  0%,
+  100% {
+    box-shadow: 0 0 20px rgba(220, 38, 38, 0.4),
+      0 4px 12px rgba(220, 38, 38, 0.2);
+  }
+  50% {
+    box-shadow: 0 0 30px rgba(220, 38, 38, 0.6),
+      0 8px 16px rgba(220, 38, 38, 0.3);
+  }
+}
+
+@keyframes softPulsePurpleStatic {
+  0%,
+  100% {
+    box-shadow: 0 0 20px rgba(168, 85, 247, 0.4),
+      0 4px 12px rgba(168, 85, 247, 0.2);
+  }
+  50% {
+    box-shadow: 0 0 30px rgba(168, 85, 247, 0.6),
+      0 8px 16px rgba(168, 85, 247, 0.3);
+  }
+}
+
+@keyframes softPulseCyanStatic {
+  0%,
+  100% {
+    box-shadow: 0 0 20px rgba(34, 211, 238, 0.4),
+      0 4px 12px rgba(34, 211, 238, 0.2);
+  }
+  50% {
+    box-shadow: 0 0 30px rgba(34, 211, 238, 0.6),
+      0 8px 16px rgba(34, 211, 238, 0.3);
+  }
+}
+
+@keyframes softPulseWhiteStatic {
+  0%,
+  100% {
+    box-shadow: 0 0 20px rgba(255, 255, 255, 0.3),
+      0 4px 12px rgba(255, 255, 255, 0.15);
+  }
+  50% {
+    box-shadow: 0 0 30px rgba(255, 255, 255, 0.4),
+      0 8px 16px rgba(255, 255, 255, 0.2);
+  }
 }

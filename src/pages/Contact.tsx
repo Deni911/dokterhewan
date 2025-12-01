@@ -95,10 +95,10 @@ _Pesan ini dikirim dari website HealthyPet_
       {/* Contact Info Cards */}
       <section className="py-16 md:py-20 bg-white">
         <style>{`
-          @keyframes fadeInDown {
+          @keyframes slideDown {
             from {
               opacity: 0;
-              transform: translateY(-20px);
+              transform: translateY(-30px);
             }
             to {
               opacity: 1;
@@ -109,7 +109,7 @@ _Pesan ini dikirim dari website HealthyPet_
           @keyframes fadeInUp {
             from {
               opacity: 0;
-              transform: translateY(20px);
+              transform: translateY(30px);
             }
             to {
               opacity: 1;
@@ -154,12 +154,12 @@ _Pesan ini dikirim dari website HealthyPet_
           }
 
           .fade-in-down {
-            animation: fadeInDown 0.8s ease-out forwards;
+            animation: slideDown 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
             opacity: 0;
           }
 
           .fade-in-up {
-            animation: fadeInUp 0.8s ease-out 0.2s forwards;
+            animation: fadeInUp 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) 0.2s forwards;
             opacity: 0;
           }
 
@@ -185,34 +185,39 @@ _Pesan ini dikirim dari website HealthyPet_
           }
 
           .form-section {
-            animation: slideInLeft 0.8s ease-out 0.3s forwards;
+            animation: slideInLeft 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) 0.3s forwards;
             opacity: 0;
           }
 
           .map-section {
-            animation: slideInRight 0.8s ease-out 0.4s forwards;
+            animation: slideInRight 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) 0.4s forwards;
+            opacity: 0;
+          }
+
+          .faq-title {
+            animation: slideDown 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
             opacity: 0;
           }
 
           .faq-item {
-            animation: fadeInUp 0.6s ease-out forwards;
+            animation: fadeInUp 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
             opacity: 0;
           }
 
           .faq-item:nth-child(1) {
-            animation-delay: 0s;
-          }
-
-          .faq-item:nth-child(2) {
             animation-delay: 0.1s;
           }
 
-          .faq-item:nth-child(3) {
+          .faq-item:nth-child(2) {
             animation-delay: 0.2s;
           }
 
-          .faq-item:nth-child(4) {
+          .faq-item:nth-child(3) {
             animation-delay: 0.3s;
+          }
+
+          .faq-item:nth-child(4) {
+            animation-delay: 0.4s;
           }
         `}</style>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -362,7 +367,7 @@ _Pesan ini dikirim dari website HealthyPet_
 
                   <button
                     type="submit"
-                    className="w-full bg-gradient-to-r from-blue-600 to-cyan-500 text-white font-bold py-3 rounded-lg hover:shadow-lg transition duration-300 flex items-center justify-center"
+                    className="w-full bg-gradient-to-r from-blue-600 to-cyan-500 text-white font-bold py-3 rounded-lg btn-glow btn-glow-blue-static transition-all duration-300 flex items-center justify-center"
                   >
                     <Send size={20} className="mr-2" />
                     Kirim Pesan
@@ -419,7 +424,11 @@ _Pesan ini dikirim dari website HealthyPet_
       {/* FAQ Section */}
       <section className="py-16 md:py-20 bg-gray-50">
         <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-3xl font-bold text-gray-900 mb-12 text-center">
+          <h2
+            className={`text-3xl font-bold text-gray-900 mb-12 text-center ${
+              isFaqVisible ? "faq-title" : "opacity-0"
+            }`}
+          >
             Pertanyaan Umum
           </h2>
 
@@ -445,11 +454,8 @@ _Pesan ini dikirim dari website HealthyPet_
               <div
                 key={index}
                 className={`bg-white p-6 rounded-lg border border-gray-200 ${
-                  isFaqVisible ? "faq-item animate" : ""
+                  isFaqVisible ? "faq-item" : "opacity-0"
                 }`}
-                style={{
-                  animationDelay: isFaqVisible ? `${index * 0.1}s` : "0s",
-                }}
               >
                 <h3 className="text-lg font-bold text-gray-900 mb-3">
                   {faq.q}

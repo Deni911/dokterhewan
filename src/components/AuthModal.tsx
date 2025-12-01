@@ -185,7 +185,7 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
 
             <button
               type="submit"
-              className="w-full px-4 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition duration-300 font-semibold"
+              className="w-full px-4 py-3 bg-blue-600 text-white rounded-lg btn-glow btn-glow-blue transition-all duration-300 font-semibold"
             >
               {isLogin ? "Login" : "Register"}
             </button>

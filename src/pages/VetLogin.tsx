@@ -129,9 +129,7 @@ export default function VetLogin() {
                     'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"%3E%3Crect fill="%23e0f2fe" width="100" height="100"/%3E%3Ctext x="50" y="50" text-anchor="middle" dy=".3em" font-size="28" fill="%230369a1" font-weight="bold"%3E🐾%3C/text%3E%3C/svg%3E';
                 }}
               />
-              <h1 className="text-3xl font-bold text-gray-900">
-                HealthyPet
-              </h1>
+              <h1 className="text-3xl font-bold text-gray-900">HealthyPet</h1>
               <p className="text-gray-600 mt-2">Portal Dokter Hewan</p>
             </div>
 
@@ -152,7 +150,7 @@ export default function VetLogin() {
                 }}
                 className={`flex-1 py-2 font-semibold rounded-lg transition ${
                   isLogin
-                    ? "bg-blue-600 text-white"
+                    ? "bg-blue-600 text-white btn-glow btn-glow-blue transition-all duration-300"
                     : "bg-gray-200 text-gray-700 hover:bg-gray-300"
                 }`}
               >
@@ -173,7 +171,7 @@ export default function VetLogin() {
                 }}
                 className={`flex-1 py-2 font-semibold rounded-lg transition ${
                   !isLogin
-                    ? "bg-blue-600 text-white"
+                    ? "bg-blue-600 text-white btn-glow btn-glow-blue transition-all duration-300"
                     : "bg-gray-200 text-gray-700 hover:bg-gray-300"
                 }`}
               >
@@ -298,7 +296,7 @@ export default function VetLogin() {
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full py-3 bg-blue-600 text-white font-bold rounded-lg hover:bg-blue-700 transition disabled:opacity-50"
+                className="w-full py-3 bg-blue-600 text-white font-bold rounded-lg btn-glow btn-glow-blue transition-all duration-300 disabled:opacity-50"
               >
                 {loading ? "Memproses..." : isLogin ? "Login" : "Daftar"}
               </button>

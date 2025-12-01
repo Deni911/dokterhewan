@@ -14,6 +14,7 @@ export default function MedicalRecords() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [selectedPet, setSelectedPet] = useState<string>("semua");
+  const [isContentVisible, setIsContentVisible] = useState(false);
 
   useEffect(() => {
     if (user) {
@@ -27,6 +28,12 @@ export default function MedicalRecords() {
       setLoading(false);
     }
   }, [user]);
+
+  useEffect(() => {
+    if (!loading && user) {
+      setIsContentVisible(true);
+    }
+  }, [loading, user]);
 
   const fetchCompletedRecords = async () => {
     try {
@@ -51,12 +58,52 @@ export default function MedicalRecords() {
   if (!user) {
     return (
       <div className="pt-16 pb-12">
-        <section className="bg-gradient-to-r from-blue-600 to-cyan-500 text-white py-16 md:py-20">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <h1 className="text-4xl md:text-5xl font-bold mb-4">
-              Riwayat Medical
-            </h1>
-            <p className="text-lg text-blue-100 max-w-2xl">
+        <section className="bg-gradient-to-r from-blue-600 to-cyan-500 text-white py-16 md:py-24 overflow-hidden">
+          <div className="absolute inset-0 opacity-20">
+            <div className="absolute top-0 right-0 w-96 h-96 bg-white rounded-full blur-3xl opacity-10"></div>
+            <div className="absolute bottom-0 left-0 w-96 h-96 bg-white rounded-full blur-3xl opacity-10"></div>
+          </div>
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <style>{`
+              .medical-hero-title {
+                animation: slideDown 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+                opacity: 0;
+              }
+
+              .medical-hero-subtitle {
+                animation: fadeInUp 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) 0.2s forwards;
+                opacity: 0;
+              }
+
+              @keyframes slideDown {
+                from {
+                  opacity: 0;
+                  transform: translateY(-30px);
+                }
+                to {
+                  opacity: 1;
+                  transform: translateY(0);
+                }
+              }
+
+              @keyframes fadeInUp {
+                from {
+                  opacity: 0;
+                  transform: translateY(30px);
+                }
+                to {
+                  opacity: 1;
+                  transform: translateY(0);
+                }
+              }
+            `}</style>
+            <div className="flex items-center gap-3 mb-4">
+              <Heart size={40} className="medical-hero-title drop-shadow-lg" />
+              <h1 className="text-4xl md:text-5xl font-bold medical-hero-title drop-shadow-lg">
+                Riwayat Medical
+              </h1>
+            </div>
+            <p className="text-lg text-blue-100 max-w-2xl medical-hero-subtitle drop-shadow-md font-medium">
               Lihat riwayat kesehatan dan treatment hewan peliharaan Anda.
             </p>
           </div>
@@ -64,7 +111,24 @@ export default function MedicalRecords() {
 
         <section className="py-16 md:py-20 bg-white">
           <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-            <div className="bg-blue-50 border-2 border-blue-200 rounded-lg p-12">
+            <style>{`
+              .login-prompt {
+                animation: fadeInScale 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) 0.3s forwards;
+                opacity: 0;
+              }
+
+              @keyframes fadeInScale {
+                from {
+                  opacity: 0;
+                  transform: scale(0.95);
+                }
+                to {
+                  opacity: 1;
+                  transform: scale(1);
+                }
+              }
+            `}</style>
+            <div className="bg-blue-50 border-2 border-blue-200 rounded-lg p-12 login-prompt">
               <h2 className="text-2xl font-bold text-gray-900 mb-4">
                 Silakan Login Terlebih Dahulu
               </h2>
@@ -74,7 +138,7 @@ export default function MedicalRecords() {
               </p>
               <button
                 onClick={() => setIsAuthModalOpen(true)}
-                className="px-8 py-3 bg-blue-600 text-white rounded-lg font-bold hover:bg-blue-700 transition"
+                className="px-8 py-3 bg-blue-600 text-white rounded-lg font-bold btn-glow btn-glow-blue transition-all duration-300"
               >
                 Login / Register
               </button>
@@ -102,13 +166,78 @@ export default function MedicalRecords() {
   return (
     <div className="pt-16 pb-12">
       {/* Hero Section */}
-      <section className="bg-gradient-to-r from-blue-600 to-cyan-500 text-white py-16 md:py-20">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <section className="bg-gradient-to-r from-blue-600 to-cyan-500 text-white py-16 md:py-24 overflow-hidden">
+        <div className="absolute inset-0 opacity-20">
+          <div className="absolute top-0 right-0 w-96 h-96 bg-white rounded-full blur-3xl opacity-10"></div>
+          <div className="absolute bottom-0 left-0 w-96 h-96 bg-white rounded-full blur-3xl opacity-10"></div>
+        </div>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+          <style>{`
+            .medical-header-title {
+              animation: slideDown 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+              opacity: 0;
+            }
+
+            .medical-header-subtitle {
+              animation: fadeInUp 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) 0.2s forwards;
+              opacity: 0;
+            }
+
+            .medical-content {
+              animation: fadeInUp 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) 0.3s forwards;
+              opacity: 0;
+            }
+
+            @keyframes slideDown {
+              from {
+                opacity: 0;
+                transform: translateY(-30px);
+              }
+              to {
+                opacity: 1;
+                transform: translateY(0);
+              }
+            }
+
+            @keyframes fadeInUp {
+              from {
+                opacity: 0;
+                transform: translateY(30px);
+              }
+              to {
+                opacity: 1;
+                transform: translateY(0);
+              }
+            }
+
+            .filter-button-container {
+              animation: fadeInUp 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) 0.3s forwards;
+              opacity: 0;
+            }
+
+            .medical-record-item {
+              animation: slideUp 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+              opacity: 0;
+            }
+
+            @keyframes slideUp {
+              from {
+                opacity: 0;
+                transform: translateY(20px);
+              }
+              to {
+                opacity: 1;
+                transform: translateY(0);
+              }
+            }
+          `}</style>
           <div className="flex items-center gap-3 mb-4">
-            <Heart size={40} />
-            <h1 className="text-4xl md:text-5xl font-bold">Riwayat Medical</h1>
+            <Heart size={40} className="medical-header-title drop-shadow-lg" />
+            <h1 className="text-4xl md:text-5xl font-bold medical-header-title drop-shadow-lg">
+              Riwayat Medical
+            </h1>
           </div>
-          <p className="text-lg text-blue-100 max-w-2xl">
+          <p className="text-lg text-blue-100 max-w-2xl medical-header-subtitle drop-shadow-md font-medium">
             Pantau kesehatan dan treatment hewan peliharaan Anda secara lengkap.
           </p>
         </div>
@@ -116,7 +245,11 @@ export default function MedicalRecords() {
 
       {/* Main Content */}
       <section className="py-16 md:py-20 bg-white">
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div
+          className={`max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 ${
+            isContentVisible ? "medical-content" : "opacity-0"
+          }`}
+        >
           {/* Error Message */}
           {error && (
             <div className="bg-red-50 border border-red-200 rounded-lg p-4 mb-6">
@@ -128,7 +261,11 @@ export default function MedicalRecords() {
 
           {/* Filter by Pet */}
           {uniquePets.length > 0 && (
-            <div className="mb-8">
+            <div
+              className={`mb-8 ${
+                isContentVisible ? "filter-button-container" : "opacity-0"
+              }`}
+            >
               <h2 className="text-lg font-bold text-gray-900 mb-3">
                 Filter Hewan Peliharaan:
               </h2>
@@ -137,7 +274,7 @@ export default function MedicalRecords() {
                   onClick={() => setSelectedPet("semua")}
                   className={`px-4 py-2 rounded-lg font-semibold transition ${
                     selectedPet === "semua"
-                      ? "bg-blue-600 text-white"
+                      ? "bg-blue-600 text-white btn-glow btn-glow-blue transition-all duration-300"
                       : "bg-gray-200 text-gray-700 hover:bg-gray-300"
                   }`}
                 >
@@ -149,7 +286,7 @@ export default function MedicalRecords() {
                     onClick={() => setSelectedPet(petName)}
                     className={`px-4 py-2 rounded-lg font-semibold transition ${
                       selectedPet === petName
-                        ? "bg-blue-600 text-white"
+                        ? "bg-blue-600 text-white btn-glow btn-glow-blue transition-all duration-300"
                         : "bg-gray-200 text-gray-700 hover:bg-gray-300"
                     }`}
                   >
@@ -195,7 +332,14 @@ export default function MedicalRecords() {
               {filteredRecords.map((record, index) => (
                 <div
                   key={record.id || index}
-                  className="bg-white border border-gray-200 rounded-lg p-6 mb-4 hover:shadow-md transition"
+                  className={`bg-white border border-gray-200 rounded-lg p-6 mb-4 hover:shadow-md transition ${
+                    isContentVisible ? "medical-record-item" : "opacity-0"
+                  }`}
+                  style={{
+                    animationDelay: isContentVisible
+                      ? `${(index + 1) * 0.1}s`
+                      : "0s",
+                  }}
                 >
                   {/* Header */}
                   <div className="flex items-start justify-between mb-4 pb-4 border-b border-gray-200">
