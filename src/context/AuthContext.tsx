@@ -22,21 +22,48 @@ interface AuthContextType {
   isLoading: boolean;
   login: (
     email: string,
-    password: string
+    password: string,
   ) => Promise<{ success: boolean; message: string }>;
   logout: () => Promise<void>;
   register: (
     email: string,
     password: string,
-    name: string
+    name: string,
   ) => Promise<{ success: boolean; message: string }>;
   validateLogin: (
     email: string,
-    password: string
+    password: string,
   ) => Promise<{ success: boolean; user?: User; message: string }>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
+
+const isValidEmail = (email: string) => /.+@.+\..+/.test(email.trim());
+
+const getFriendlyAuthError = (error: any, defaultMessage: string) => {
+  const code = error?.code;
+
+  switch (code) {
+    case "auth/invalid-email":
+      return "Format email tidak valid. Gunakan format contoh@domain.com";
+    case "auth/user-not-found":
+      return "Akun belum terdaftar. Silakan daftar terlebih dahulu.";
+    case "auth/wrong-password":
+      return "Password salah. Silakan cek kembali password Anda.";
+    case "auth/invalid-credential":
+      return "Email atau password salah. Silakan cek kembali data Anda.";
+    case "auth/email-already-in-use":
+      return "Email sudah terdaftar. Silakan gunakan email lain.";
+    case "auth/weak-password":
+      return "Password terlalu lemah. Gunakan minimal 6 karakter.";
+    case "auth/too-many-requests":
+      return "Terlalu banyak percobaan login. Coba beberapa saat lagi.";
+    case "auth/network-request-failed":
+      return "Koneksi jaringan bermasalah. Silakan coba lagi.";
+    default:
+      return error?.message || defaultMessage;
+  }
+};
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
@@ -64,7 +91,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
           setUser(null);
         }
         setIsLoading(false);
-      }
+      },
     );
 
     return () => unsubscribe();
@@ -74,9 +101,20 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const register = async (
     email: string,
     password: string,
-    name: string
+    name: string,
   ): Promise<{ success: boolean; message: string }> => {
     try {
+      if (!email.trim() || !password.trim() || !name.trim()) {
+        return { success: false, message: "Semua field harus diisi" };
+      }
+
+      if (!isValidEmail(email)) {
+        return {
+          success: false,
+          message: "Format email tidak valid. Gunakan format contoh@domain.com",
+        };
+      }
+
       // Check if email already exists
       const existingUsers = await getDoc(doc(db, "users", email));
       if (existingUsers.exists()) {
@@ -91,7 +129,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       const userCredential = await createUserWithEmailAndPassword(
         auth,
         email,
-        password
+        password,
       );
       const uid = userCredential.user.uid;
 
@@ -108,20 +146,34 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       return { success: true, message: "Register berhasil. Silakan login" };
     } catch (error: any) {
       console.error("Register error:", error);
-      return { success: false, message: error.message || "Register gagal" };
+      return {
+        success: false,
+        message: getFriendlyAuthError(error, "Register gagal"),
+      };
     }
   };
 
   // Login
   const login = async (
     email: string,
-    password: string
+    password: string,
   ): Promise<{ success: boolean; message: string }> => {
     try {
+      if (!email.trim() || !password.trim()) {
+        return { success: false, message: "Email dan password harus diisi" };
+      }
+
+      if (!isValidEmail(email)) {
+        return {
+          success: false,
+          message: "Format email tidak valid. Gunakan format contoh@domain.com",
+        };
+      }
+
       const userCredential = await signInWithEmailAndPassword(
         auth,
         email,
-        password
+        password,
       );
       const uid = userCredential.user.uid;
 
@@ -138,19 +190,17 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       return { success: false, message: "User tidak ditemukan" };
     } catch (error: any) {
       console.error("Login error:", error);
-      if (error.code === "auth/user-not-found") {
-        return { success: false, message: "Email tidak ditemukan" };
-      } else if (error.code === "auth/wrong-password") {
-        return { success: false, message: "Password salah" };
-      }
-      return { success: false, message: error.message || "Login gagal" };
+      return {
+        success: false,
+        message: getFriendlyAuthError(error, "Login gagal"),
+      };
     }
   };
 
   // Validate Login (compatibility with existing code)
   const validateLogin = async (
     email: string,
-    password: string
+    password: string,
   ): Promise<{ success: boolean; user?: User; message: string }> => {
     const result = await login(email, password);
     if (result.success && user) {

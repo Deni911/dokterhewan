@@ -29,8 +29,13 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
 
     if (isLogin) {
       // Login mode
-      if (!email || !password) {
+      if (!email.trim() || !password.trim()) {
         setError("Email dan password harus diisi");
+        return;
+      }
+
+      if (!email.includes("@") || !email.includes(".")) {
+        setError("Format email tidak valid. Gunakan format contoh@domain.com");
         return;
       }
 

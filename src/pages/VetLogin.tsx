@@ -30,8 +30,15 @@ export default function VetLogin() {
     e.preventDefault();
     setLocalError("");
 
-    if (!formData.email || !formData.password) {
+    if (!formData.email.trim() || !formData.password.trim()) {
       setLocalError("Email dan password harus diisi");
+      return;
+    }
+
+    if (!formData.email.includes("@") || !formData.email.includes(".")) {
+      setLocalError(
+        "Format email tidak valid. Gunakan format contoh@domain.com",
+      );
       return;
     }
 
@@ -48,14 +55,21 @@ export default function VetLogin() {
     setLocalError("");
 
     if (
-      !formData.email ||
-      !formData.password ||
-      !formData.name ||
-      !formData.phone ||
-      !formData.specialization ||
-      !formData.clinic
+      !formData.email.trim() ||
+      !formData.password.trim() ||
+      !formData.name.trim() ||
+      !formData.phone.trim() ||
+      !formData.specialization.trim() ||
+      !formData.clinic.trim()
     ) {
       setLocalError("Mohon isi semua field");
+      return;
+    }
+
+    if (!formData.email.includes("@") || !formData.email.includes(".")) {
+      setLocalError(
+        "Format email tidak valid. Gunakan format contoh@domain.com",
+      );
       return;
     }
 
@@ -122,7 +136,7 @@ export default function VetLogin() {
             <div className="text-center mb-8">
               <img
                 src="/images/veterinary.png"
-                alt="DokterHewan Logo"
+                alt=" Hewan Logo"
                 className="h-20 w-20 object-cover rounded-lg mx-auto mb-4"
                 onError={(e) => {
                   e.currentTarget.src =
