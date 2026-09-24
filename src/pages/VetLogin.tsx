@@ -22,7 +22,7 @@ export default function VetLogin() {
     const { name, value } = e.target;
     setFormData((prev) => ({
       ...prev,
-      [name]: value,
+      [name]: name === "email" ? value.replace(/\s+/g, "") : value,
     }));
   };
 
@@ -66,9 +66,9 @@ export default function VetLogin() {
       return;
     }
 
-    if (!formData.email.includes("@") || !formData.email.includes(".")) {
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email.trim())) {
       setLocalError(
-        "Format email tidak valid. Gunakan format contoh@domain.com",
+        "Email tidak valid. Gunakan format contoh@domain.com tanpa spasi.",
       );
       return;
     }

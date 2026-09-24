@@ -7,7 +7,7 @@ import {
   type User as FirebaseUser,
 } from "firebase/auth";
 import { auth, db } from "../config/firebase";
-import { doc, setDoc, getDoc } from "firebase/firestore";
+import { doc, setDoc, getDoc, serverTimestamp } from "firebase/firestore";
 
 interface User {
   uid: string;
@@ -38,7 +38,10 @@ interface AuthContextType {
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-const isValidEmail = (email: string) => /.+@.+\..+/.test(email.trim());
+const isValidEmail = (email: string) => {
+  const normalized = email.trim();
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(normalized);
+};
 
 const getFriendlyAuthError = (error: any, defaultMessage: string) => {
   const code = error?.code;
@@ -111,21 +114,16 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       if (!isValidEmail(email)) {
         return {
           success: false,
-          message: "Format email tidak valid. Gunakan format contoh@domain.com",
+          message:
+            "Email tidak valid. Gunakan format contoh@domain.com tanpa spasi.",
         };
-      }
-
-      // Check if email already exists
-      const existingUsers = await getDoc(doc(db, "users", email));
-      if (existingUsers.exists()) {
-        return { success: false, message: "Email sudah terdaftar" };
       }
 
       if (password.length < 6) {
         return { success: false, message: "Password minimal 6 karakter" };
       }
 
-      // Create user in Firebase Auth
+      // Create user in Firebase Auth first so Firebase validates duplicate emails.
       const userCredential = await createUserWithEmailAndPassword(
         auth,
         email,
@@ -133,14 +131,14 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       );
       const uid = userCredential.user.uid;
 
-      // Save user data to Firestore
+      // Store profile data under the authenticated UID, which is the safe Firestore key.
       await setDoc(doc(db, "users", uid), {
         uid,
         name,
         email,
         phone: "",
         profilePicture: `https://ui-avatars.com/api/?name=${name}&background=random`,
-        createdAt: new Date(),
+        createdAt: serverTimestamp(),
       });
 
       return { success: true, message: "Register berhasil. Silakan login" };
@@ -166,7 +164,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       if (!isValidEmail(email)) {
         return {
           success: false,
-          message: "Format email tidak valid. Gunakan format contoh@domain.com",
+          message:
+            "Email tidak valid. Gunakan format contoh@domain.com tanpa spasi.",
         };
       }
 

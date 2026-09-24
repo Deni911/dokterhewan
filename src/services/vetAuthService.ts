@@ -22,14 +22,14 @@ export interface Vet {
 export const registerVet = async (
   email: string,
   password: string,
-  vetData: Omit<Vet, "uid" | "createdAt">
+  vetData: Omit<Vet, "uid" | "createdAt">,
 ): Promise<Vet> => {
   try {
     // Create auth user
     const userCredential = await createUserWithEmailAndPassword(
       auth,
       email,
-      password
+      password,
     );
     const uid = userCredential.user.uid;
 
@@ -39,6 +39,8 @@ export const registerVet = async (
       ...vetData,
       createdAt: Timestamp.now(),
     };
+
+    // Use the authenticated UID as the Firestore document ID for secure access control.
 
     await setDoc(doc(db, "vets", uid), vetDoc);
     console.log("Vet registered successfully");
@@ -55,7 +57,7 @@ export const loginVet = async (email: string, password: string) => {
     const userCredential = await signInWithEmailAndPassword(
       auth,
       email,
-      password
+      password,
     );
     const uid = userCredential.user.uid;
 
@@ -104,7 +106,7 @@ export const getCurrentVet = async (user: User): Promise<Vet | null> => {
 
 // Listen to vet auth state changes
 export const onVetAuthStateChanged = (
-  callback: (vet: Vet | null, user: User | null) => void
+  callback: (vet: Vet | null, user: User | null) => void,
 ) => {
   return onAuthStateChanged(auth, async (user) => {
     if (user) {

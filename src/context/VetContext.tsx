@@ -24,7 +24,10 @@ interface VetContextType {
 
 const VetContext = createContext<VetContextType | undefined>(undefined);
 
-const isValidEmail = (email: string) => /.+@.+\..+/.test(email.trim());
+const isValidEmail = (email: string) => {
+  const normalized = email.trim();
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(normalized);
+};
 
 const getFriendlyVetError = (error: any, defaultMessage: string) => {
   const code = error?.code;
@@ -79,7 +82,7 @@ export function VetProvider({ children }: { children: React.ReactNode }) {
 
       if (!isValidEmail(email)) {
         throw new Error(
-          "Format email tidak valid. Gunakan format contoh@domain.com",
+          "Email tidak valid. Gunakan format contoh@domain.com tanpa spasi.",
         );
       }
 
@@ -109,7 +112,7 @@ export function VetProvider({ children }: { children: React.ReactNode }) {
 
       if (!isValidEmail(email)) {
         throw new Error(
-          "Format email tidak valid. Gunakan format contoh@domain.com",
+          "Email tidak valid. Gunakan format contoh@domain.com tanpa spasi.",
         );
       }
 
