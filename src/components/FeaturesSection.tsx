@@ -1,8 +1,17 @@
+import { useRef } from "react";
+import { motion } from "framer-motion";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { useGSAP } from "@gsap/react";
+
+gsap.registerPlugin(useGSAP, ScrollTrigger);
+
 interface FeaturesProps {
   isFeatureVisible: boolean;
 }
 
 export default function FeaturesSection({ isFeatureVisible }: FeaturesProps) {
+  const gridRef = useRef<HTMLDivElement>(null);
   const features = [
     {
       title: "Dokter Berpengalaman",
@@ -26,6 +35,33 @@ export default function FeaturesSection({ isFeatureVisible }: FeaturesProps) {
       gradient: "linear-gradient(135deg, #a855f7 0%, #6d28d9 100%)",
     },
   ];
+
+  useGSAP(
+    (_, contextSafe) => {
+      const cards = gsap.utils.toArray<HTMLElement>(".feature-card");
+      gsap.set(cards, { autoAlpha: 0, y: 24 });
+      const animateCards = () => {
+        gsap.to(cards, {
+          autoAlpha: 1,
+          y: 0,
+          duration: 0.7,
+          stagger: 0.14,
+          ease: "power2.out",
+        });
+      };
+      const revealCards = contextSafe
+        ? contextSafe(animateCards)
+        : animateCards;
+
+      ScrollTrigger.create({
+        trigger: gridRef.current,
+        start: "top 82%",
+        once: true,
+        onEnter: revealCards,
+      });
+    },
+    { scope: gridRef }
+  );
 
   return (
     <>
@@ -121,29 +157,6 @@ export default function FeaturesSection({ isFeatureVisible }: FeaturesProps) {
           margin-top: 8px;
         }
 
-        @keyframes slideInUp {
-          from {
-            opacity: 0;
-            transform: translateY(30px);
-          }
-          to {
-            opacity: 1;
-            transform: translateY(0);
-          }
-        }
-
-        .slide-in-up-1 {
-          animation: slideInUp 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) 0.1s both !important;
-        }
-
-        .slide-in-up-2 {
-          animation: slideInUp 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) 0.2s both !important;
-        }
-
-        .slide-in-up-3 {
-          animation: slideInUp 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) 0.3s both !important;
-        }
-
         @media (max-width: 768px) {
           .feature-card {
             height: 280px;
@@ -159,27 +172,30 @@ export default function FeaturesSection({ isFeatureVisible }: FeaturesProps) {
         }
       `}</style>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+      <div ref={gridRef} className="grid grid-cols-1 md:grid-cols-3 gap-8">
         {features.map((feature, index) => (
-          <div
+          <motion.div
             key={index}
-            className={`feature-card ${
-              isFeatureVisible
-                ? [`slide-in-up-1`, `slide-in-up-2`, `slide-in-up-3`][index]
-                : "opacity-0"
-            }`}
-            style={{
-              backgroundImage: `url('${feature.image}')`,
-            }}
-            onError={(e) => {
-              e.currentTarget.style.backgroundImage = feature.gradient;
-            }}
+            className="h-full"
+            whileHover={{ y: -4 }}
+            whileTap={{ scale: 0.995 }}
+            transition={{ type: "spring", stiffness: 320, damping: 28 }}
           >
-            <div className="feature-card-overlay">
-              <h3>{feature.title}</h3>
-              <p>{feature.description}</p>
+            <div
+              className={`feature-card ${isFeatureVisible ? "" : "opacity-0"}`}
+              style={{
+                backgroundImage: `url('${feature.image}')`,
+              }}
+              onError={(e) => {
+                e.currentTarget.style.backgroundImage = feature.gradient;
+              }}
+            >
+              <div className="feature-card-overlay">
+                <h3>{feature.title}</h3>
+                <p>{feature.description}</p>
+              </div>
             </div>
-          </div>
+          </motion.div>
         ))}
       </div>
     </>

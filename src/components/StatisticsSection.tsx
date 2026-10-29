@@ -1,4 +1,10 @@
 import { useRef, useState, useEffect } from "react";
+import { motion } from "framer-motion";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { useGSAP } from "@gsap/react";
+
+gsap.registerPlugin(useGSAP, ScrollTrigger);
 
 function CounterNumber({
   end,
@@ -50,6 +56,7 @@ function CounterNumber({
 }
 
 export default function StatisticsSection() {
+  const gridRef = useRef<HTMLDivElement>(null);
   const stats = [
     {
       number: 12,
@@ -81,26 +88,57 @@ export default function StatisticsSection() {
     },
   ];
 
+  useGSAP(
+    (_, contextSafe) => {
+      const cards = gsap.utils.toArray<HTMLElement>(".stat-card");
+      gsap.set(cards, { autoAlpha: 0, y: 20 });
+      const animateCards = () => {
+        gsap.to(cards, {
+          autoAlpha: 1,
+          y: 0,
+          duration: 0.65,
+          stagger: 0.1,
+          ease: "power2.out",
+        });
+      };
+      const revealCards = contextSafe
+        ? contextSafe(animateCards)
+        : animateCards;
+
+      ScrollTrigger.create({
+        trigger: gridRef.current,
+        start: "top 84%",
+        once: true,
+        onEnter: revealCards,
+      });
+    },
+    { scope: gridRef }
+  );
+
   return (
-    <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+    <div ref={gridRef} className="grid grid-cols-1 md:grid-cols-4 gap-8">
       {stats.map((stat, index) => (
-        <div
+        <motion.div
           key={index}
-          className="bg-white p-8 rounded-lg border border-gray-200 hover:shadow-lg transition duration-300 text-center"
+          whileHover={{ y: -3 }}
+          whileTap={{ scale: 0.995 }}
+          transition={{ type: "spring", stiffness: 320, damping: 28 }}
         >
-          <div className={`text-5xl font-bold ${stat.color} mb-3`}>
-            {stat.text ? (
-              stat.text
-            ) : (
-              <>
-                <CounterNumber end={stat.number} duration={3000} />
-                {stat.suffix}
-              </>
-            )}
+          <div className="stat-card bg-white p-8 rounded-lg border border-gray-200 hover:shadow-lg transition duration-300 text-center">
+            <div className={`text-5xl font-bold ${stat.color} mb-3`}>
+              {stat.text ? (
+                stat.text
+              ) : (
+                <>
+                  <CounterNumber end={stat.number} duration={3000} />
+                  {stat.suffix}
+                </>
+              )}
+            </div>
+            <h3 className="text-xl font-bold text-gray-900">{stat.title}</h3>
+            <p className="text-gray-600 text-sm mt-2">{stat.description}</p>
           </div>
-          <h3 className="text-xl font-bold text-gray-900">{stat.title}</h3>
-          <p className="text-gray-600 text-sm mt-2">{stat.description}</p>
-        </div>
+        </motion.div>
       ))}
     </div>
   );

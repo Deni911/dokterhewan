@@ -8,25 +8,16 @@ import "./Navbar.css";
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
-  const [isClosing, setIsClosing] = useState(false);
   const { user, logout } = useAuth();
   const mobileMenuRef = useRef<HTMLDivElement>(null);
   const menuButtonRef = useRef<HTMLButtonElement>(null);
 
-  const toggleMenu = () => setIsOpen(!isOpen);
-
-  // Handle menu closing with animation
-  const closeMenuWithAnimation = () => {
-    setIsClosing(true);
-    setTimeout(() => {
-      setIsOpen(false);
-      setIsClosing(false);
-    }, 400);
-  };
+  const toggleMenu = () => setIsOpen((open) => !open);
+  const closeMenu = () => setIsOpen(false);
 
   // Scroll to top on navigation
   const handleNavigation = () => {
-    closeMenuWithAnimation();
+    closeMenu();
     window.scrollTo(0, 0);
   };
 
@@ -40,7 +31,7 @@ export default function Navbar() {
         !mobileMenuRef.current.contains(event.target as Node) &&
         !menuButtonRef.current.contains(event.target as Node)
       ) {
-        closeMenuWithAnimation();
+        closeMenu();
       }
     };
 
@@ -165,128 +156,114 @@ export default function Navbar() {
             ref={menuButtonRef}
             onClick={toggleMenu}
             className="xl:hidden p-2 text-gray-700 hover:text-blue-600 transition"
+            aria-label={isOpen ? "Tutup menu navigasi" : "Buka menu navigasi"}
+            aria-expanded={isOpen}
+            aria-controls="mobile-navigation"
           >
             {isOpen ? (
               <X
                 size={24}
-                className="animate-spin-fast transition-transform duration-300"
-                style={{ transform: isOpen ? "rotate(90deg)" : "rotate(0deg)" }}
+                className="hamburger-icon open"
               />
             ) : (
-              <Menu
-                size={24}
-                className="animate-pulse-slow transition-transform duration-300"
-                style={{ transform: isOpen ? "rotate(90deg)" : "rotate(0deg)" }}
-              />
+              <Menu size={24} className="hamburger-icon" />
             )}
           </button>
         </div>
       </div>
       {/* Mobile Menu */}
       <div
+        id="mobile-navigation"
         ref={mobileMenuRef}
-        className={`xl:hidden bg-white border-t border-gray-200 origin-top transition-all duration-300 ${
-          isOpen && !isClosing
-            ? "animate-slide-down opacity-100 visible"
-            : "animate-slide-up opacity-0 invisible"
-        } ${isClosing ? "menu-container-closing" : ""}`}
-        style={{
-          maxHeight: isOpen && !isClosing ? "1000px" : "0px",
-          overflow: "hidden",
-        }}
+        className={`mobile-menu xl:hidden ${isOpen ? "is-open" : ""}`}
+        aria-hidden={!isOpen}
       >
-        {(isOpen || isClosing) && (
-          <div
-            className={`px-2 pt-2 pb-3 space-y-1 ${
-              isClosing ? "menu-closing" : ""
-            }`}
+        <div className="mobile-menu-content px-2 pt-2 pb-3 space-y-1">
+          <Link
+            to="/"
+            className="block rounded-lg px-3 py-2 text-center text-white/90 hover:bg-white/10 hover:text-cyan-200 transition font-medium"
+            onClick={handleNavigation}
           >
-            <Link
-              to="/"
-              className="menu-item block px-3 py-2 text-center text-gray-700 hover:text-blue-600 transition font-medium"
-              onClick={handleNavigation}
-            >
-              Home
-            </Link>
-            <Link
-              to="/about"
-              className="menu-item block px-3 py-2 text-center text-gray-700 hover:text-blue-600 transition font-medium"
-              onClick={handleNavigation}
-            >
-              About
-            </Link>
-            <Link
-              to="/services"
-              className="menu-item block px-3 py-2 text-center text-gray-700 hover:text-blue-600 transition font-medium"
-              onClick={handleNavigation}
-            >
-              Services
-            </Link>
-            <Link
-              to="/contact"
-              className="menu-item block px-3 py-2 text-center text-gray-700 hover:text-blue-600 transition font-medium"
-              onClick={handleNavigation}
-            >
-              Contact
-            </Link>
+            Home
+          </Link>
+          <Link
+            to="/about"
+            className="block rounded-lg px-3 py-2 text-center text-white/90 hover:bg-white/10 hover:text-cyan-200 transition font-medium"
+            onClick={handleNavigation}
+          >
+            About
+          </Link>
+          <Link
+            to="/services"
+            className="block rounded-lg px-3 py-2 text-center text-white/90 hover:bg-white/10 hover:text-cyan-200 transition font-medium"
+            onClick={handleNavigation}
+          >
+            Services
+          </Link>
+          <Link
+            to="/contact"
+            className="block rounded-lg px-3 py-2 text-center text-white/90 hover:bg-white/10 hover:text-cyan-200 transition font-medium"
+            onClick={handleNavigation}
+          >
+            Contact
+          </Link>
 
-            {/* Mobile Medical Records Link */}
-            {user && (
-              <Link
-                to="/medical-records"
-                className="menu-item block px-3 py-2 text-center text-gray-700 hover:text-blue-600 transition font-medium"
-                onClick={handleNavigation}
-              >
-                Medical Records
-              </Link>
-            )}
+          {/* Mobile Medical Records Link */}
+          {user && (
+            <Link
+              to="/medical-records"
+              className="block rounded-lg px-3 py-2 text-center text-white/90 hover:bg-white/10 hover:text-cyan-200 transition font-medium"
+              onClick={handleNavigation}
+            >
+              Medical Records
+            </Link>
+          )}
 
-            {/* Mobile Auth Section */}
-            <div className={`menu-item border-t border-gray-200 pt-2 mt-2`}>
-              {user ? (
-                <>
-                  <div className="px-3 py-2 flex items-center justify-center gap-2">
-                    <img
-                      src={user.profilePicture}
-                      alt={user.name}
-                      className="w-8 h-8 rounded-full"
-                    />
-                    <span className="text-sm font-medium text-gray-900">
-                      {user.name}
-                    </span>
-                  </div>
-                  <Link
-                    to="/booking"
-                    className="block w-full px-4 py-2.5 text-white bg-gradient-to-r from-purple-600 to-pink-500 rounded-lg font-medium btn-glow btn-glow-purple-static transition-all duration-300 mx-2 my-1 text-center"
-                    onClick={handleNavigation}
-                  >
-                    Booking
-                  </Link>
-                  <button
-                    onClick={() => {
-                      logout();
-                      closeMenuWithAnimation();
-                    }}
-                    className="block w-full px-4 py-2.5 text-white bg-red-600 rounded-lg font-medium btn-glow btn-glow-red-static transition-all duration-300 mx-2 my-1 text-center"
-                  >
-                    Logout
-                  </button>
-                </>
-              ) : (
+          {/* Mobile Auth Section */}
+          <div className="border-t border-white/20 pt-2 mt-2">
+            {user ? (
+              <>
+                <div className="px-3 py-2 flex items-center justify-center gap-2">
+                  <img
+                    src={user.profilePicture}
+                    alt={user.name}
+                    className="w-8 h-8 rounded-full"
+                  />
+                  <span className="text-sm font-medium text-white">
+                    {user.name}
+                  </span>
+                </div>
+                <Link
+                  to="/booking"
+                  className="block w-full px-4 py-2.5 text-white bg-gradient-to-r from-purple-600 to-pink-500 rounded-lg font-medium btn-glow btn-glow-purple-static transition-all duration-300 mx-2 my-1 text-center"
+                  onClick={handleNavigation}
+                >
+                  Booking
+                </Link>
                 <button
                   onClick={() => {
-                    setIsAuthModalOpen(true);
-                    closeMenuWithAnimation();
+                    logout();
+                    closeMenu();
                   }}
-                  className="block w-full px-3 py-2 text-white bg-gradient-to-r from-blue-600 to-cyan-500 rounded-lg font-medium hover:shadow-lg transition mx-2 my-1 flex items-center justify-center gap-2"
+                  className="block w-full px-4 py-2.5 text-white bg-red-600 rounded-lg font-medium btn-glow btn-glow-red-static transition-all duration-300 mx-2 my-1 text-center"
                 >
-                  <LogIn size={16} />
-                  <span>Login</span>
+                  Logout
                 </button>
-              )}
-            </div>
+              </>
+            ) : (
+              <button
+                onClick={() => {
+                  setIsAuthModalOpen(true);
+                  closeMenu();
+                }}
+                className="block w-full px-3 py-2 text-white bg-gradient-to-r from-blue-600 to-cyan-500 rounded-lg font-medium hover:shadow-lg transition mx-2 my-1 flex items-center justify-center gap-2"
+              >
+                <LogIn size={16} />
+                <span>Login</span>
+              </button>
+            )}
           </div>
-        )}
+        </div>
       </div>
       {/* Auth Modal */}
       <AuthModal

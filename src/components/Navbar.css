@@ -1,148 +1,57 @@
-/* Smooth slide down animation for mobile menu */
-@keyframes slideDown {
-  from {
-    opacity: 0;
-    transform: translateY(-10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+.mobile-menu {
+  max-height: 0;
+  overflow: hidden;
+  visibility: hidden;
+  pointer-events: none;
+  transform: translateY(-0.75rem) scale(0.985);
+  transform-origin: top;
+  opacity: 0;
+  border-top: 1px solid transparent;
+  background: rgba(15, 23, 42, 0.78);
+  -webkit-backdrop-filter: blur(24px) saturate(160%);
+  backdrop-filter: blur(24px) saturate(160%);
+  box-shadow: 0 16px 36px rgba(15, 23, 42, 0.2);
+  transition:
+    max-height 450ms cubic-bezier(0.22, 1, 0.36, 1),
+    opacity 280ms ease,
+    transform 450ms cubic-bezier(0.22, 1, 0.36, 1),
+    border-color 280ms ease,
+    visibility 0s linear 450ms;
 }
 
-/* Smooth slide up animation for closing menu */
-@keyframes slideUp {
-  from {
-    opacity: 1;
-    transform: translateY(0);
-  }
-  to {
-    opacity: 0;
-    transform: translateY(-10px);
-  }
+.mobile-menu.is-open {
+  max-height: 80vh;
+  overflow-y: auto;
+  visibility: visible;
+  pointer-events: auto;
+  transform: translateY(0) scale(1);
+  opacity: 1;
+  border-top-color: rgba(255, 255, 255, 0.18);
+  transition:
+    max-height 500ms cubic-bezier(0.22, 1, 0.36, 1),
+    opacity 320ms ease 40ms,
+    transform 500ms cubic-bezier(0.22, 1, 0.36, 1),
+    border-color 280ms ease,
+    visibility 0s;
 }
 
-/* Spin animation for close icon */
-@keyframes spinFast {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(90deg);
-  }
+.mobile-menu-content {
+  padding-bottom: max(0.75rem, env(safe-area-inset-bottom));
 }
 
-/* Pulse animation for menu icon */
-@keyframes pulseSlow {
-  0%,
-  100% {
-    opacity: 1;
-  }
-  50% {
-    opacity: 0.7;
-  }
-}
-
-/* Hamburger icon smooth rotation */
-@keyframes rotateOpen {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(90deg);
-  }
-}
-
-@keyframes rotateClose {
-  from {
-    transform: rotate(90deg);
-  }
-  to {
-    transform: rotate(0deg);
-  }
-}
-
-/* Apply animations */
-.animate-slide-down {
-  animation: slideDown 0.3s ease-out forwards;
-}
-
-.animate-slide-up {
-  animation: slideUp 0.3s ease-in forwards;
-}
-
-.animate-spin-fast {
-  animation: spinFast 0.3s ease-out forwards;
-}
-
-.animate-pulse-slow {
-  animation: pulseSlow 2s ease-in-out infinite;
-}
-
-/* Smooth hamburger menu button animations */
 .hamburger-icon {
-  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  transition: transform 320ms cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .hamburger-icon.open {
-  animation: rotateOpen 0.3s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+  transform: rotate(90deg);
 }
 
-.hamburger-icon.close {
-  animation: rotateClose 0.3s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
-}
-
-/* Menu items closing animation - stagger effect */
-@keyframes menuItemClose {
-  from {
-    opacity: 1;
-    transform: translateX(0);
+@media (prefers-reduced-motion: reduce) {
+  .mobile-menu,
+  .mobile-menu.is-open,
+  .hamburger-icon {
+    transition-duration: 0.01ms;
+    transition-delay: 0ms;
   }
-  to {
-    opacity: 0;
-    transform: translateX(10px);
-  }
-}
-
-.menu-closing .menu-item {
-  animation: menuItemClose 0.2s ease-in forwards;
-}
-
-.menu-item:nth-child(1) {
-  animation-delay: 0s;
-}
-.menu-item:nth-child(2) {
-  animation-delay: 0.05s;
-}
-.menu-item:nth-child(3) {
-  animation-delay: 0.1s;
-}
-.menu-item:nth-child(4) {
-  animation-delay: 0.15s;
-}
-.menu-item:nth-child(5) {
-  animation-delay: 0.2s;
-}
-.menu-item:nth-child(6) {
-  animation-delay: 0.25s;
-}
-.menu-item:nth-child(7) {
-  animation-delay: 0.3s;
-}
-
-/* Container closing animation */
-@keyframes menuContainerClose {
-  from {
-    max-height: 1000px;
-    opacity: 1;
-  }
-  to {
-    max-height: 0px;
-    opacity: 0;
-  }
-}
-
-.menu-container-closing {
-  animation: menuContainerClose 0.4s ease-in forwards !important;
-  border-top: none;
 }

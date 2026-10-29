@@ -19,6 +19,8 @@ import VetDashboard from "./pages/VetDashboard";
 import VetLogin from "./pages/VetLogin";
 import "./App.css";
 import { GoogleOAuthProvider } from "@react-oauth/google";
+import { AnimatePresence, MotionConfig } from "framer-motion";
+import PageTransition from "./components/PageTransition";
 
 function AppContent() {
   const location = useLocation();
@@ -28,22 +30,28 @@ function AppContent() {
     location.pathname === "/vet-dashboard";
 
   return (
-    <div className="flex flex-col min-h-screen bg-white">
-      {!hideNavbar && <Navbar />}
-      <main className="flex-grow">
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/about" element={<About />} />
-          <Route path="/services" element={<Services />} />
-          <Route path="/contact" element={<Contact />} />
-          <Route path="/booking" element={<Booking />} />
-          <Route path="/medical-records" element={<MedicalRecords />} />
-          <Route path="/vet-login" element={<VetLogin />} />
-          <Route path="/vet-dashboard" element={<VetDashboard />} />
-        </Routes>
-      </main>
-      {!hideNavbar && <Footer />}
-    </div>
+    <MotionConfig reducedMotion="user">
+      <div className="flex flex-col min-h-screen bg-white">
+        {!hideNavbar && <Navbar />}
+        <main className="flex-grow">
+          <AnimatePresence mode="wait">
+            <PageTransition key={location.pathname}>
+              <Routes location={location}>
+                <Route path="/" element={<Home />} />
+                <Route path="/about" element={<About />} />
+                <Route path="/services" element={<Services />} />
+                <Route path="/contact" element={<Contact />} />
+                <Route path="/booking" element={<Booking />} />
+                <Route path="/medical-records" element={<MedicalRecords />} />
+                <Route path="/vet-login" element={<VetLogin />} />
+                <Route path="/vet-dashboard" element={<VetDashboard />} />
+              </Routes>
+            </PageTransition>
+          </AnimatePresence>
+        </main>
+        {!hideNavbar && <Footer />}
+      </div>
+    </MotionConfig>
   );
 }
 
