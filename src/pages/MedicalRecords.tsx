@@ -44,7 +44,7 @@ export default function MedicalRecords() {
       // TESTING: Tampilkan semua medical records (tidak hanya yang completed)
       // Untuk production, ganti ke getCompletedMedicalRecords(user.uid)
       const data = await getUserMedicalRecords(user.uid);
-      console.log("📋 Fetched all records (TESTING):", data);
+      console.log(" Fetched all records (TESTING):", data);
       setRecords(data);
     } catch (err) {
       console.error("Error fetching medical records:", err);

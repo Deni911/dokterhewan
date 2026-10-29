@@ -377,7 +377,7 @@ export default function Booking() {
 
                     <div>
                       <label className="block text-gray-700 font-semibold mb-2">
-                        Layanan Diperlukan
+                        Layanan 
                       </label>
                       <select
                         name="service"
