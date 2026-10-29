@@ -116,16 +116,22 @@ export default function StatisticsSection() {
   );
 
   return (
-    <div ref={gridRef} className="grid grid-cols-1 md:grid-cols-4 gap-8">
+    <div
+      ref={gridRef}
+      className="grid grid-cols-1 gap-5 sm:grid-cols-2 sm:gap-6 xl:grid-cols-4 xl:gap-8"
+    >
       {stats.map((stat, index) => (
         <motion.div
           key={index}
+          className="h-full"
           whileHover={{ y: -3 }}
           whileTap={{ scale: 0.995 }}
           transition={{ type: "spring", stiffness: 320, damping: 28 }}
         >
-          <div className="stat-card bg-white p-8 rounded-lg border border-gray-200 hover:shadow-lg transition duration-300 text-center">
-            <div className={`text-5xl font-bold ${stat.color} mb-3`}>
+          <div className="stat-card flex h-full min-h-[230px] flex-col items-center justify-center rounded-lg border border-gray-200 bg-white px-6 py-7 text-center transition duration-300 hover:shadow-lg sm:min-h-[250px] sm:px-7 xl:min-h-[270px] xl:p-8">
+            <div
+              className={`mb-3 flex min-h-14 items-center justify-center text-5xl font-bold ${stat.color}`}
+            >
               {stat.text ? (
                 stat.text
               ) : (
@@ -135,8 +141,12 @@ export default function StatisticsSection() {
                 </>
               )}
             </div>
-            <h3 className="text-xl font-bold text-gray-900">{stat.title}</h3>
-            <p className="text-gray-600 text-sm mt-2">{stat.description}</p>
+            <h3 className="flex min-h-14 items-center justify-center text-xl font-bold text-gray-900">
+              {stat.title}
+            </h3>
+            <p className="mt-2 flex min-h-12 items-center justify-center text-sm text-gray-600">
+              {stat.description}
+            </p>
           </div>
         </motion.div>
       ))}
