@@ -5,7 +5,6 @@ import {
   browserLocalPersistence,
 } from "firebase/auth";
 import { getFirestore } from "firebase/firestore";
-import { getStorage } from "firebase/storage";
 
 const firebaseConfig = {
   apiKey: "AIzaSyAXglP3ddLgNTpjvTvF-mQ8HBPcT5MrjJk",
@@ -30,8 +29,5 @@ setPersistence(auth, browserLocalPersistence).catch((error) =>
 
 // Initialize Firestore
 export const db = getFirestore(app);
-
-// Initialize Storage (untuk upload foto)
-export const storage = getStorage(app);
 
 export default app;

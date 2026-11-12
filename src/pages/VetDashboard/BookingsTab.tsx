@@ -6,8 +6,19 @@ import {
   Phone,
   Calendar,
   Clock,
+  FileImage,
+  FileText,
+  X,
 } from "lucide-react";
 import { useTheme } from "../../context/ThemeContext";
+import {
+  deleteMedicalRecordAttachments,
+  isSupportedMedicalRecordAttachment,
+  MAX_MEDICAL_RECORD_ATTACHMENT_SIZE,
+  MAX_MEDICAL_RECORD_ATTACHMENTS,
+  uploadMedicalRecordAttachments,
+  type MedicalRecordAttachment,
+} from "../../services/medicalRecordService";
 import {
   getPendingBookings,
   findMedicalRecordByBooking,
@@ -37,6 +48,9 @@ export function BookingsTab({ vetName = "", onError }: BookingsTabProps) {
   );
   const [medicalRecordId, setMedicalRecordId] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
+  const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
+  const [attachments, setAttachments] = useState<MedicalRecordAttachment[]>([]);
+  const [fileError, setFileError] = useState("");
   const [formData, setFormData] = useState<MedicalData>({
     diagnosis: "",
     treatment: "",
@@ -65,6 +79,10 @@ export function BookingsTab({ vetName = "", onError }: BookingsTabProps) {
   const handleSelectBooking = async (booking: VetBooking) => {
     try {
       setSelectedBooking(booking);
+      setMedicalRecordId(null);
+      setSelectedFiles([]);
+      setAttachments([]);
+      setFileError("");
       setFormData({
         diagnosis: "",
         treatment: "",
@@ -81,6 +99,7 @@ export function BookingsTab({ vetName = "", onError }: BookingsTabProps) {
 
       if (medicalRecord) {
         setMedicalRecordId(medicalRecord.id);
+        setAttachments(medicalRecord.attachments || []);
         setFormData({
           diagnosis: medicalRecord.diagnosis || "",
           treatment: medicalRecord.treatment || "",
@@ -97,7 +116,7 @@ export function BookingsTab({ vetName = "", onError }: BookingsTabProps) {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!medicalRecordId) {
+    if (!medicalRecordId || !selectedBooking) {
       onError("Medical record tidak ditemukan");
       return;
     }
@@ -109,11 +128,36 @@ export function BookingsTab({ vetName = "", onError }: BookingsTabProps) {
 
     try {
       setSubmitting(true);
-      await updateMedicalRecord(medicalRecordId, formData);
+      const uploadedAttachments = await uploadMedicalRecordAttachments(
+        medicalRecordId,
+        selectedBooking.userId,
+        selectedFiles
+      );
+      const nextAttachments = [...attachments, ...uploadedAttachments];
 
-      if (selectedBooking) {
-        await completeBooking(selectedBooking.id);
+      try {
+        await updateMedicalRecord(medicalRecordId, {
+          ...formData,
+          attachments: nextAttachments,
+        });
+      } catch (error) {
+        if (uploadedAttachments.length > 0) {
+          try {
+            await deleteMedicalRecordAttachments(uploadedAttachments);
+          } catch (cleanupError) {
+            console.error(
+              "Failed to clean up attachments after saving failed:",
+              cleanupError
+            );
+          }
+        }
+        throw error;
       }
+
+      setAttachments(nextAttachments);
+      setSelectedFiles([]);
+
+      await completeBooking(selectedBooking.id);
 
       setSelectedBooking(null);
       setFormData({
@@ -122,6 +166,7 @@ export function BookingsTab({ vetName = "", onError }: BookingsTabProps) {
         prescription: "",
         vetName: vetName,
       });
+      setAttachments([]);
       setMedicalRecordId(null);
 
       await fetchBookings();
@@ -131,6 +176,40 @@ export function BookingsTab({ vetName = "", onError }: BookingsTabProps) {
     } finally {
       setSubmitting(false);
     }
+  };
+
+  const handleFileSelection = (files: FileList | null) => {
+    if (!files) return;
+
+    const selected = Array.from(files);
+    const totalCount = attachments.length + selectedFiles.length + selected.length;
+    if (totalCount > MAX_MEDICAL_RECORD_ATTACHMENTS) {
+      setFileError(
+        `Maksimal ${MAX_MEDICAL_RECORD_ATTACHMENTS} file untuk satu medical record.`
+      );
+      return;
+    }
+
+    const unsupportedFile = selected.find(
+      (file) => !isSupportedMedicalRecordAttachment(file)
+    );
+    if (unsupportedFile) {
+      setFileError(
+        `${unsupportedFile.name}: format file tidak didukung. Gunakan gambar atau PDF.`
+      );
+      return;
+    }
+
+    const oversizedFile = selected.find(
+      (file) => file.size > MAX_MEDICAL_RECORD_ATTACHMENT_SIZE
+    );
+    if (oversizedFile) {
+      setFileError(`${oversizedFile.name}: ukuran file melebihi 10 MB.`);
+      return;
+    }
+
+    setFileError("");
+    setSelectedFiles((current) => [...current, ...selected]);
   };
 
   return (
@@ -482,6 +561,114 @@ export function BookingsTab({ vetName = "", onError }: BookingsTabProps) {
                     placeholder="Resep/obat yang diberikan (opsional)"
                   />
                 </div>
+
+                <div>
+                  <p
+                    className={`block text-sm font-semibold mb-2 ${
+                      isDarkMode ? "text-gray-300" : "text-gray-700"
+                    }`}
+                  >
+                    Lampiran pemeriksaan{" "}
+                    <span className="font-normal opacity-70">(opsional)</span>
+                  </p>
+                  <label
+                    htmlFor="medical-record-attachments"
+                    className={`flex cursor-pointer flex-col items-center justify-center rounded-xl border-2 border-dashed px-5 py-7 text-center transition ${
+                      isDarkMode
+                        ? "border-gray-600 bg-gray-700/40 hover:border-blue-400"
+                        : "border-blue-200 bg-blue-50/60 hover:border-blue-400"
+                    }`}
+                  >
+                    <FileImage
+                      size={28}
+                      className="mb-2 text-blue-500"
+                      aria-hidden="true"
+                    />
+                    <span
+                      className={`font-semibold ${
+                        isDarkMode ? "text-white" : "text-gray-800"
+                      }`}
+                    >
+                      Pilih foto rontgen, USG, atau dokumen
+                    </span>
+                    <span
+                      className={`mt-1 text-xs ${
+                        isDarkMode ? "text-gray-400" : "text-gray-500"
+                      }`}
+                    >
+                      Gambar atau PDF, maksimal 10 MB per file dan 5 file
+                    </span>
+                    <input
+                      id="medical-record-attachments"
+                      type="file"
+                      accept="image/avif,image/bmp,image/gif,image/heic,image/heif,image/jpeg,image/png,image/tiff,image/webp,application/pdf"
+                      multiple
+                      className="sr-only"
+                      disabled={submitting}
+                      onChange={(event) => {
+                        handleFileSelection(event.target.files);
+                        event.target.value = "";
+                      }}
+                    />
+                  </label>
+
+                  {fileError && (
+                    <p className="mt-2 text-sm text-red-500" role="alert">
+                      {fileError}
+                    </p>
+                  )}
+
+                  {(attachments.length > 0 || selectedFiles.length > 0) && (
+                    <ul className="mt-3 space-y-2">
+                      {attachments.map((attachment) => (
+                        <li
+                          key={attachment.path}
+                          className={`flex items-center gap-2 rounded-lg px-3 py-2 text-sm ${
+                            isDarkMode
+                              ? "bg-gray-700 text-gray-200"
+                              : "bg-gray-100 text-gray-700"
+                          }`}
+                        >
+                          <FileText size={16} className="shrink-0 text-blue-500" />
+                          <span className="min-w-0 flex-1 truncate">
+                            {attachment.name}
+                          </span>
+                          <span className="shrink-0 text-xs opacity-70">
+                            Tersimpan
+                          </span>
+                        </li>
+                      ))}
+                      {selectedFiles.map((file, index) => (
+                        <li
+                          key={`${file.name}-${file.lastModified}-${index}`}
+                          className={`flex items-center gap-2 rounded-lg px-3 py-2 text-sm ${
+                            isDarkMode
+                              ? "bg-gray-700 text-gray-200"
+                              : "bg-gray-100 text-gray-700"
+                          }`}
+                        >
+                          <FileText size={16} className="shrink-0 text-blue-500" />
+                          <span className="min-w-0 flex-1 truncate">
+                            {file.name}
+                          </span>
+                          <button
+                            type="button"
+                            disabled={submitting}
+                            onClick={() =>
+                              setSelectedFiles((current) =>
+                                current.filter((_, fileIndex) => fileIndex !== index)
+                              )
+                            }
+                            className="rounded p-1 text-gray-500 hover:text-red-500"
+                            aria-label={`Hapus ${file.name} dari daftar unggahan`}
+                          >
+                            <X size={16} />
+                          </button>
+                        </li>
+                      ))}
+                    </ul>
+                  )}
+                </div>
               </div>
 
               <div className="flex gap-3 mt-6">
@@ -502,7 +689,11 @@ export function BookingsTab({ vetName = "", onError }: BookingsTabProps) {
                   className="flex-1 px-4 py-2 bg-green-600 text-white rounded-lg font-semibold hover:bg-green-700 transition disabled:opacity-50 flex items-center justify-center gap-2"
                 >
                   <Check size={18} />
-                  {submitting ? "Menyimpan..." : "Simpan & Selesaikan"}
+                  {submitting
+                    ? selectedFiles.length > 0
+                      ? "Mengunggah & menyimpan..."
+                      : "Menyimpan..."
+                    : "Simpan & Selesaikan"}
                 </button>
               </div>
             </form>

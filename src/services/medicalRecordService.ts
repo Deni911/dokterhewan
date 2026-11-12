@@ -7,6 +7,18 @@ import {
   addDoc,
   Timestamp,
 } from "firebase/firestore";
+import { auth } from "../config/firebase";
+import { MEDICAL_RECORD_BUCKET, supabase } from "../config/supabase";
+
+export type MedicalRecordAttachment = {
+  path: string;
+  name: string;
+  contentType: string;
+  size: number;
+};
+
+export const MAX_MEDICAL_RECORD_ATTACHMENT_SIZE = 10 * 1024 * 1024;
+export const MAX_MEDICAL_RECORD_ATTACHMENTS = 5;
 
 export type MedicalRecord = {
   id?: string;
@@ -22,8 +34,109 @@ export type MedicalRecord = {
   visitTime: string;
   estimatedEndTime: string; // Waktu estimasi selesai
   vetName: string;
-  createdAt?: any;
+  attachments?: MedicalRecordAttachment[];
+  createdAt?: Timestamp | Date | string;
 };
+
+const allowedAttachmentTypes = new Set([
+  "image/avif",
+  "image/bmp",
+  "image/gif",
+  "image/heic",
+  "image/heif",
+  "image/jpeg",
+  "image/png",
+  "image/tiff",
+  "image/webp",
+  "application/pdf",
+]);
+
+export function isSupportedMedicalRecordAttachment(file: File): boolean {
+  return allowedAttachmentTypes.has(file.type);
+}
+
+export async function uploadMedicalRecordAttachments(
+  recordId: string,
+  userId: string,
+  files: File[]
+): Promise<MedicalRecordAttachment[]> {
+  const uploaded: MedicalRecordAttachment[] = [];
+  if (files.length === 0) return uploaded;
+
+  const vetUid = auth.currentUser?.uid;
+  if (!vetUid) {
+    throw new Error("Sesi dokter berakhir. Silakan login kembali.");
+  }
+
+  try {
+    for (const file of files) {
+      if (!isSupportedMedicalRecordAttachment(file)) {
+        throw new Error(
+          `${file.name}: format file tidak didukung. Gunakan gambar atau PDF.`
+        );
+      }
+
+      if (file.size > MAX_MEDICAL_RECORD_ATTACHMENT_SIZE) {
+        throw new Error(`${file.name}: ukuran file melebihi 10 MB.`);
+      }
+
+      const path = `medicalRecords/${recordId}/${userId}/${vetUid}/${crypto.randomUUID()}`;
+      const { error } = await supabase.storage
+        .from(MEDICAL_RECORD_BUCKET)
+        .upload(path, file, {
+          contentType: file.type,
+          upsert: false,
+        });
+      if (error) {
+        throw error;
+      }
+
+      uploaded.push({
+        path,
+        name: file.name,
+        contentType: file.type,
+        size: file.size,
+      });
+    }
+
+    return uploaded;
+  } catch (error) {
+    if (uploaded.length > 0) {
+      const { error: cleanupError } = await supabase.storage
+        .from(MEDICAL_RECORD_BUCKET)
+        .remove(uploaded.map((attachment) => attachment.path));
+      if (cleanupError) {
+        console.error(
+          "Failed to clean up an incomplete medical attachment:",
+          cleanupError
+        );
+      }
+    }
+    console.error("Error uploading medical record attachments:", error);
+    throw error;
+  }
+}
+
+export async function deleteMedicalRecordAttachments(
+  attachments: MedicalRecordAttachment[]
+): Promise<void> {
+  if (attachments.length === 0) return;
+
+  const { error } = await supabase.storage
+    .from(MEDICAL_RECORD_BUCKET)
+    .remove(attachments.map((attachment) => attachment.path));
+  if (error) throw error;
+}
+
+export async function getMedicalRecordAttachmentBlob(
+  attachment: MedicalRecordAttachment
+): Promise<Blob> {
+  const { data, error } = await supabase.storage
+    .from(MEDICAL_RECORD_BUCKET)
+    .download(attachment.path);
+  if (error) throw error;
+  return data;
+}
 
 // Get all user medical records (simplified - no orderBy to avoid index)
 export async function getUserMedicalRecords(

@@ -21,9 +21,19 @@ import "./App.css";
 import { GoogleOAuthProvider } from "@react-oauth/google";
 import { AnimatePresence, MotionConfig } from "framer-motion";
 import PageTransition from "./components/PageTransition";
+import IntroSplash from "./components/IntroSplash";
+import { useCallback, useState } from "react";
 
 function AppContent() {
   const location = useLocation();
+  const [showIntro, setShowIntro] = useState(
+    () => window.sessionStorage.getItem("healthypet-intro-seen") !== "true"
+  );
+  const dismissIntro = useCallback(() => {
+    window.sessionStorage.setItem("healthypet-intro-seen", "true");
+    setShowIntro(false);
+  }, []);
+
   // Hide navbar di vet-login dan vet-dashboard page
   const hideNavbar =
     location.pathname === "/vet-login" ||
@@ -51,6 +61,9 @@ function AppContent() {
         </main>
         {!hideNavbar && <Footer />}
       </div>
+      <AnimatePresence>
+        {showIntro && <IntroSplash onDismiss={dismissIntro} />}
+      </AnimatePresence>
     </MotionConfig>
   );
 }

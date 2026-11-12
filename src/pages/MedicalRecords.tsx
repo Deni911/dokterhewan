@@ -1,7 +1,9 @@
 import { useState, useEffect } from "react";
 import { Heart, Stethoscope } from "lucide-react";
+import { Timestamp } from "firebase/firestore";
 import { useAuth } from "../context/AuthContext";
 import AuthModal from "../components/AuthModal";
+import MedicalRecordAttachments from "../components/MedicalRecordAttachments";
 import {
   getUserMedicalRecords,
   type MedicalRecord,
@@ -414,6 +416,12 @@ export default function MedicalRecords() {
                       </div>
                     )}
 
+                    {record.attachments && record.attachments.length > 0 && (
+                      <MedicalRecordAttachments
+                        attachments={record.attachments}
+                      />
+                    )}
+
                     {/* Notes */}
                     {record.notes && (
                       <div>
@@ -428,8 +436,11 @@ export default function MedicalRecords() {
                     {record.createdAt && (
                       <p className="text-xs text-gray-500 text-right pt-2">
                         Dicatat pada:{" "}
-                        {new Date(
-                          record.createdAt.toDate?.() || record.createdAt
+                        {(record.createdAt instanceof Timestamp
+                          ? record.createdAt.toDate()
+                          : record.createdAt instanceof Date
+                          ? record.createdAt
+                          : new Date(record.createdAt)
                         ).toLocaleDateString("id-ID", {
                           year: "numeric",
                           month: "short",

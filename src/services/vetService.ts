@@ -8,6 +8,10 @@ import {
   doc,
   Timestamp,
 } from "firebase/firestore";
+import type {
+  MedicalRecord,
+  MedicalRecordAttachment,
+} from "./medicalRecordService";
 
 export interface VetBooking {
   id: string;
@@ -32,6 +36,7 @@ export interface MedicalRecordUpdate {
   treatment: string;
   prescription: string;
   vetName: string;
+  attachments?: MedicalRecordAttachment[];
 }
 
 // Get all pending bookings untuk dokter (yang belum di-handle)
@@ -104,7 +109,7 @@ export async function findMedicalRecordByBooking(
   petName: string,
   visitDate: string,
   visitTime: string
-): Promise<any> {
+): Promise<(MedicalRecord & { id: string }) | null> {
   try {
     const q = query(
       collection(db, "medicalRecords"),
@@ -118,7 +123,7 @@ export async function findMedicalRecordByBooking(
     for (const docSnap of querySnapshot.docs) {
       const data = docSnap.data();
       if (data.visitDate === visitDate && data.visitTime === visitTime) {
-        return { id: docSnap.id, ...data };
+        return { id: docSnap.id, ...data } as MedicalRecord & { id: string };
       }
     }
 
